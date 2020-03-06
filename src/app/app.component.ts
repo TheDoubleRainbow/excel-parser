@@ -12,6 +12,7 @@ export class AppComponent {
   sheetNames: Array<string>;
   sheets: any;
   selectedName: string;
+  selectedValue: string;
   selectedFilterValue: Line[];
   lines: Array<Line>;
   conditionList: Array<LineRenderType>;
@@ -38,7 +39,7 @@ export class AppComponent {
   }
 
   selectFilter(event: any) {
-    this.selectedFilterValue = event.target.value;
+    this.selectedValue = event.target.value;
   }
 
   listOfTopCondition() {
@@ -111,21 +112,25 @@ export class AppComponent {
     console.log(this.lines);
 
     this.listOfTopCondition();
-    console.log('listForSelect', this.selectedFilterValue);
   }
 
   selectCondition() {
     this.conditionList = this.lines.reduce((acc, line) => {
-      if (line.columns.B === this.selectedFilterValue) {
-        acc.push({
+      if (line.columns.B === this.selectedValue) {
+        acc = acc.concat({
           B: line.columns.B,
           G: line.columns.G,
           L: line.columns.L,
           O: line.columns.O,
+          P: line.columns.P,
         });
       }
       return acc;
     }, []);
     console.log('conditionList', this.conditionList);
+  }
+
+  selectSubCondition(val: string){
+    console.log('val', val);
   }
 }

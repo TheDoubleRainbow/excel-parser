@@ -1,27 +1,39 @@
 <div>
-  <input type="file" multiple="false" (change)="onFileUpload($event)" />
+    <input type="file" multiple="false" (change)="onFileUpload($event)" />
 </div>
 
 <div *ngIf="sheetNames">
-  <h2>Sheet names</h2>
-  <select (change) = "selectSheet($event)">
-    <option *ngFor="let name of sheetNames" class="sheet-name">{{name}}</option>
-  </select>
-  <button (click)="parseSheetLines()">Parse lines</button>
+    <h2>Sheet names</h2>
+    <select (change)="selectSheet($event)">
+        <option *ngFor="let name of sheetNames" class="sheet-name">{{
+            name
+        }}</option>
+    </select>
+    <button (click)="parseSheetLines()">Parse lines</button>
 </div>
 
 <div *ngIf="lines">
-  <h2>select top condition</h2>
-  <select (change) = "selectFilter($event)">
-    <option *ngFor="let name of selectedFilterValue" class="sheet-name">{{name}}</option>
-  </select>
-  <button (click)="selectCondition()">Find condition</button>
+    <h2>select top condition</h2>
+    <select (change)="selectFilter($event)">
+        <option *ngFor="let name of selectedFilterValue" class="sheet-name">{{
+            name
+        }}</option>
+    </select>
+    <button (click)="selectCondition()">Find condition</button>
 </div>
 
-
 <div>
-  <span>text</span>
-  <div class="table">
-    <span>{{conditionList}}</span>
-  </div>
+    <div *ngIf="conditionList" class="table title">
+      <div class="item">Context Name</div>
+      <div class="item">Command Id</div>
+      <div class="item">Final prompt Id</div>
+      <div class="item">Action class</div>
+    </div>
+    <div *ngFor="let name of conditionList" class="table">
+        <div class="item">{{ name.B }}</div>
+        <div class="item">{{ name.G }}</div>
+        <div class="item">{{ name.L }}</div>
+        <div class="item">{{ name.P }}</div>
+        <div (click)="selectSubCondition(name.P)" class="item">{{ name.P }}</div>
+    </div>
 </div>

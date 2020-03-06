@@ -8,4 +8,5 @@ export type LineRenderType = {
   G: string;
   L: string;
   O: string;
+  P: string;
 };
