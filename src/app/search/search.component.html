@@ -1,0 +1,11 @@
+<div *ngIf="lines" class="search-box">
+    <input (change) = "onSearchType($event)" type="text" class="input search" placeholder="Search"/>
+
+    <div class="result">
+        <table *ngIf="result.length > 1" class="table is-fullwidth resultMany">
+            <tr *ngFor="let line of result" class="result-variant">
+                <td>{{line.row}}</td><td *ngFor="let column of objectToArray(line.columns)" class="column">{{column[1]}}</td>
+            </tr>
+        </table>
+    </div>
+</div>

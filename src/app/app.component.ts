@@ -59,7 +59,7 @@ export class AppComponent {
       const splitedKey:any = keys[i].split('');
       const column = splitedKey.splice(0, 1).join('');
       const row = splitedKey.join('')*1;
-      const cellContent = this.sheets[this.selectedName][column+row].h;
+      const cellContent = this.sheets[this.selectedName][column+row].v;
       if(this.lines[row]) {
         this.lines[row].columns[column] = cellContent;
       }
