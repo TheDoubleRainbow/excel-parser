@@ -12,6 +12,7 @@ export class AppComponent {
   sheetNames: Array<string>;
   sheets: any;
   selectedName: string;
+  selectedFilterValue: Array<string>;
   lines: Array<Line>;
 
   onFileUpload(event: any) {
@@ -33,6 +34,14 @@ export class AppComponent {
 
   selectSheet(event: any) {
     this.selectedName = event.target.value;
+  }
+
+  selectFilter(event: any) {
+    this.selectedFilterValue = event.target.value;
+  }
+
+  listOfTopCondition() {
+    return this.lines.filter(item => item.columns)
   }
 
   isIndex(index: string) {

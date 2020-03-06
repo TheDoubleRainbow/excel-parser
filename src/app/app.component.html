@@ -9,3 +9,11 @@
   </select>
   <button (click)="parseSheetLines()">Parse lines</button>
 </div>
+
+<div *ngIf="lines.length">
+  <h2>select top condition</h2>
+  <select (change) = "selectFilter($event)">
+    <option *ngFor="let name of selectedFilterValue" class="sheet-name">{{name}}</option>
+  </select>
+  <button (click)="">Find condition</button>
+</div>
