@@ -51,25 +51,55 @@ export class AppComponent {
   parseSheetLines() {
     let keys = Object.keys(this.sheets[this.selectedName]);
     this.lines = [];
+    let columnIDsMap = {};
     for(let i = 0; i < keys.length; i++) {
-      // console.log(keys[i]);
+      if(!this.isIndex(keys[i])) { continue; }
+      const splitedKey:any = keys[i].split('');
+      const column = splitedKey.splice(0, 1).join('');
+      if(!columnIDsMap[column]) {
+        columnIDsMap[column] = true;
+      }
+    }
+    
+    const columnIDs = Object.keys(columnIDsMap).sort();
+
+    for(let i = 0; i < keys.length; i++) {
       if(!this.isIndex(keys[i])) { continue; }
       const splitedKey:any = keys[i].split('');
       const column = splitedKey.splice(0, 1).join('');
       const row = splitedKey.join('')*1;
       const cellContent = this.sheets[this.selectedName][column+row].h;
       if(this.lines[row]) {
-        this.lines[row].strings.push(cellContent)
-        this.lines[row].columns.push(column);
+        this.lines[row].columns[column] = cellContent;
       }
       else {
         this.lines[row] = {
           row,
-          columns: [column],
-          strings: [cellContent]
+          columns: {
+            [column]: cellContent,
+          }
         }
       }
     }
+
+    console.log(columnIDs, this.lines);
+
+    for(let i = 1; i < this.lines.length; i++) {
+      let line = this.lines[i];
+
+      for(let j = 0; j < columnIDs.length; j++) {
+        let id = columnIDs[j];
+        if(!line.columns[id]) {
+          if(this.lines[i-1] && this.lines[i-1].columns[id]) {
+            line.columns[id] = this.lines[i-1].columns[id];
+          }
+          else {
+            line.columns[id] = '';
+          }
+        }
+      }
+    }
+
     console.log(this.lines);
   }
 }
