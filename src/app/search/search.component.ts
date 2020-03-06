@@ -18,7 +18,6 @@ export class SearchComponent implements OnInit {
     let query = event.target.value;
     if(query.length > 3) {
       this.result = this.search(query);
-      console.log(this.result);
     }
   }
 
@@ -37,8 +36,10 @@ export class SearchComponent implements OnInit {
     return result;
   }
 
-  objectToArray(obj): Array<any> {
-    return Object.entries(obj)
+  objectKeys(obj): Array<any> {
+    let keys = Object.keys(obj).sort();
+
+    return keys
   }
 
   ngOnInit(): void {

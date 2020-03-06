@@ -4,7 +4,7 @@
     <div class="result">
         <table *ngIf="result.length > 1" class="table is-fullwidth resultMany">
             <tr *ngFor="let line of result" class="result-variant">
-                <td>{{line.row}}</td><td *ngFor="let column of objectToArray(line.columns)" class="column">{{column[1]}}</td>
+                <td>{{line.row}}</td><td *ngFor="let key of objectKeys(line.columns)" class="column">{{line.columns[key]}}</td>
             </tr>
         </table>
     </div>

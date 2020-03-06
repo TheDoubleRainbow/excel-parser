@@ -73,8 +73,6 @@ export class AppComponent {
       }
     }
 
-    console.log(columnIDs, this.lines);
-
     for(let i = 1; i < this.lines.length; i++) {
       let line = this.lines[i];
 
@@ -91,6 +89,6 @@ export class AppComponent {
       }
     }
 
-    console.log(this.lines);
+
   }
 }
