@@ -1,22 +1,23 @@
 import { Component } from '@angular/core';
 
 import * as xlsx from 'xlsx';
-import { Line } from './types';
+import { Line, LineRenderType } from './types';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
   sheetNames: Array<string>;
   sheets: any;
   selectedName: string;
-  selectedFilterValue: Array<string>;
+  selectedFilterValue: Line[];
   lines: Array<Line>;
+  conditionList: Array<LineRenderType>;
 
   onFileUpload(event: any) {
-    if(event.target.files.length !== 1) {
+    if (event.target.files.length !== 1) {
       return;
     }
 
@@ -24,11 +25,11 @@ export class AppComponent {
     const reader = new FileReader();
     reader.onload = (e: any) => {
       const binary = e.target.result;
-      const wb: xlsx.WorkBook = xlsx.read(binary, {type: 'binary'});
+      const wb: xlsx.WorkBook = xlsx.read(binary, { type: 'binary' });
       console.log(wb);
       this.sheetNames = wb.SheetNames;
       this.sheets = wb.Sheets;
-    }
+    };
     reader.readAsBinaryString(file);
   }
 
@@ -41,7 +42,12 @@ export class AppComponent {
   }
 
   listOfTopCondition() {
-    return this.lines.filter(item => item.columns)
+    this.selectedFilterValue = this.lines.reduce((acc, item) => {
+      if (item.columns.B && !acc.includes(item.columns.B)) {
+        acc.push(item.columns.B);
+      }
+      return acc;
+    }, []);
   }
 
   isIndex(index: string) {
@@ -52,48 +58,50 @@ export class AppComponent {
     let keys = Object.keys(this.sheets[this.selectedName]);
     this.lines = [];
     let columnIDsMap = {};
-    for(let i = 0; i < keys.length; i++) {
-      if(!this.isIndex(keys[i])) { continue; }
-      const splitedKey:any = keys[i].split('');
+    for (let i = 0; i < keys.length; i++) {
+      if (!this.isIndex(keys[i])) {
+        continue;
+      }
+      const splitedKey: any = keys[i].split('');
       const column = splitedKey.splice(0, 1).join('');
-      if(!columnIDsMap[column]) {
+      if (!columnIDsMap[column]) {
         columnIDsMap[column] = true;
       }
     }
-    
+
     const columnIDs = Object.keys(columnIDsMap).sort();
 
-    for(let i = 0; i < keys.length; i++) {
-      if(!this.isIndex(keys[i])) { continue; }
-      const splitedKey:any = keys[i].split('');
-      const column = splitedKey.splice(0, 1).join('');
-      const row = splitedKey.join('')*1;
-      const cellContent = this.sheets[this.selectedName][column+row].h;
-      if(this.lines[row]) {
-        this.lines[row].columns[column] = cellContent;
+    for (let i = 0; i < keys.length; i++) {
+      if (!this.isIndex(keys[i])) {
+        continue;
       }
-      else {
+      const splitedKey: any = keys[i].split('');
+      const column = splitedKey.splice(0, 1).join('');
+      const row = splitedKey.join('') * 1;
+      const cellContent = this.sheets[this.selectedName][column + row].h;
+      if (this.lines[row]) {
+        this.lines[row].columns[column] = cellContent;
+      } else {
         this.lines[row] = {
           row,
           columns: {
             [column]: cellContent,
-          }
-        }
+          },
+        };
       }
     }
 
     console.log(columnIDs, this.lines);
 
-    for(let i = 1; i < this.lines.length; i++) {
+    for (let i = 1; i < this.lines.length; i++) {
       let line = this.lines[i];
 
-      for(let j = 0; j < columnIDs.length; j++) {
+      for (let j = 0; j < columnIDs.length; j++) {
         let id = columnIDs[j];
-        if(!line.columns[id]) {
-          if(this.lines[i-1] && this.lines[i-1].columns[id]) {
-            line.columns[id] = this.lines[i-1].columns[id];
-          }
-          else {
+        if (!line.columns[id]) {
+          if (this.lines[i - 1] && this.lines[i - 1].columns[id]) {
+            line.columns[id] = this.lines[i - 1].columns[id];
+          } else {
             line.columns[id] = '';
           }
         }
@@ -101,5 +109,23 @@ export class AppComponent {
     }
 
     console.log(this.lines);
+
+    this.listOfTopCondition();
+    console.log('listForSelect', this.selectedFilterValue);
+  }
+
+  selectCondition() {
+    this.conditionList = this.lines.reduce((acc, line) => {
+      if (line.columns.B === this.selectedFilterValue) {
+        acc.push({
+          B: line.columns.B,
+          G: line.columns.G,
+          L: line.columns.L,
+          O: line.columns.O,
+        });
+      }
+      return acc;
+    }, []);
+    console.log('conditionList', this.conditionList);
   }
 }
