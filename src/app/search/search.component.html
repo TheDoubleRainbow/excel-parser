@@ -1,11 +1,12 @@
 <div *ngIf="lines" class="search-box">
     <div class="filter">
         <span>Select columns to display: </span>
-        <span *ngFor="let item of columnIDs" class="column-select">
+        <span *ngFor="let item of columnIDs" class="tag is-light">
             <input type="checkbox" [checked] = "filter[item]" (click) = "changeFilter(item)" />{{item}}
         </span>
         <div class="default-columns">
-            <span>Display default for</span> <button (click) = "defaultFilter('phone')">Phone</button> or <button (click) = "defaultFilter('audio')">Audio</button>
+            <span>Display default for </span> <span class="tag is-primary" (click) = "defaultFilter('phone')">Phone</span>
+             or <span class="tag is-primary" (click) = "defaultFilter('audio')">Audio</span>
         </div>
     </div>
     <input (change) = "onSearchType($event)" type="text" class="input search" placeholder="Search"/>
@@ -24,7 +25,10 @@
                         <td *ngIf="filter[key] && line.columns[key] === 'Follow-Up'" (click) = "followUp(line, key)" class="is-follow-up-cell">
                             {{line.columns[key]}}
                         </td>
-                        <td *ngIf="filter[key] && line.columns[key] != 'Follow-Up'">
+                        <td *ngIf="filter[key] && line.columns[key] != 'Follow-Up' && key === 'G'" (click) = "onCommandClick($event)">
+                            {{line.columns[key]}}
+                        </td>
+                        <td *ngIf="filter[key] && line.columns[key] != 'Follow-Up' && key != 'G'">
                             {{line.columns[key]}}
                         </td>
                     </ng-container>

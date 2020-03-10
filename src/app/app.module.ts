@@ -7,13 +7,15 @@ import { AppComponent } from './app.component';
 import { SearchComponent } from './search/search.component';
 import { SheetComponent } from './sheet/sheet.component';
 import { FollowUpComponent } from './follow-up/follow-up.component';
+import { PopupComponent } from './popup/popup.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SearchComponent,
     SheetComponent,
-    FollowUpComponent
+    FollowUpComponent,
+    PopupComponent
   ],
   imports: [
     BrowserModule,

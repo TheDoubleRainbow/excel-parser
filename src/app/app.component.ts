@@ -11,25 +11,34 @@ import { Line } from './types';
 export class AppComponent {
   sheetNames: Array<string>;
   sheets: any;
-  selectedName: string;
-  lines: Array<Line>;
   columnIDs: Array<string>;
+  lines: Array<Line>;
+  commandSheets: any;
+  commandColumnIDs: Array<string>;
+  commandLines: Array<Line>;
+  selectedName: string;
   fileType: string;
 
-  onFileUpload(event: any) {
+  onFileUpload(event: any, type: string) {
     if(event.target.files.length !== 1) {
       return;
     }
 
     const file = event.target.files[0];
-    this.fileType = file.name.includes('Audio') ? 'audio' : file.name.includes('Phone') ? 'phone' : 'Unknown';
     const reader = new FileReader();
     reader.onload = (e: any) => {
       const binary = e.target.result;
       const wb: xlsx.WorkBook = xlsx.read(binary, {type: 'binary'});
       console.log(wb);
-      this.sheetNames = wb.SheetNames;
-      this.sheets = wb.Sheets;
+      if(type === 'vui') {
+        this.sheetNames = wb.SheetNames;
+        this.sheets = wb.Sheets;
+        this.fileType = file.name.includes('Audio') ? 'audio' : file.name.includes('Phone') ? 'phone' : 'Unknown';
+      }
+      else if(type === 'commands') {
+        this.commandSheets = wb.Sheets;
+        this.parseSheetLines(this.commandSheets, 'Mapping', this.commandLines, this.commandColumnIDs, 'commands');
+      }
     }
     reader.readAsBinaryString(file);
   }
@@ -42,9 +51,10 @@ export class AppComponent {
     return RegExp(/[A-Z]/).test(index[0]);
   }
 
-  parseSheetLines() {
-    let keys = Object.keys(this.sheets[this.selectedName]);
-    this.lines = [];
+  parseSheetLines(sheets, selectedName, lines, columnIDs, type) {
+    console.log(sheets, selectedName, lines, columnIDs, type);
+    let keys = Object.keys(sheets[selectedName]);
+    lines = [];
     let columnIDsMap = {};
     for(let i = 0; i < keys.length; i++) {
       if(!this.isIndex(keys[i])) { continue; }
@@ -55,19 +65,19 @@ export class AppComponent {
       }
     }
     
-    this.columnIDs = Object.keys(columnIDsMap).sort();
+    columnIDs = Object.keys(columnIDsMap).sort();
 
     for(let i = 0; i < keys.length; i++) {
       if(!this.isIndex(keys[i])) { continue; }
       const splitedKey:any = keys[i].split('');
       const column = splitedKey.splice(0, 1).join('');
       const row = splitedKey.join('')*1;
-      const cellContent = this.sheets[this.selectedName][column+row].v;
-      if(this.lines[row]) {
-        this.lines[row].columns[column] = cellContent;
+      const cellContent = sheets[selectedName][column+row].v;
+      if(lines[row]) {
+        lines[row].columns[column] = cellContent;
       }
       else {
-        this.lines[row] = {
+        lines[row] = {
           row,
           columns: {
             [column]: cellContent,
@@ -76,14 +86,14 @@ export class AppComponent {
       }
     }
 
-    for(let i = 1; i < this.lines.length; i++) {
-      let line = this.lines[i];
+    for(let i = 1; i < lines.length; i++) {
+      let line = lines[i];
 
-      for(let j = 0; j < this.columnIDs.length; j++) {
-        let id = this.columnIDs[j];
+      for(let j = 0; j < columnIDs.length; j++) {
+        let id = columnIDs[j];
         if(!line.columns[id]) {
-          if(this.lines[i-1] && this.lines[i-1].columns[id] && (id === 'G' || id === 'H')) {
-            line.columns[id] = this.lines[i-1].columns[id];
+          if(lines[i-1] && lines[i-1].columns[id] && (id === 'G' || id === 'H')  && type === 'vui') {
+            line.columns[id] = lines[i-1].columns[id];
           }
           else {
             line.columns[id] = '';
@@ -92,5 +102,20 @@ export class AppComponent {
       }
     }
 
+    if(type === 'vui') {
+      this.sheets = sheets;
+      this.selectedName = selectedName;
+      this.lines = lines;
+      this.columnIDs = columnIDs;
+    }
+    else {
+      this.commandSheets = sheets;
+      this.commandLines = lines;
+      this.commandColumnIDs = columnIDs;
+    }
+    console.log(sheets, selectedName, lines, columnIDs, type);
+  }
+  onCommandClick(event) {
+    console.log(event);
   }
 }

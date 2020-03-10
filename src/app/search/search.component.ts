@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Line } from './../types';
 import { HeadersConfig, DefaultFilters } from './../settings';
 
@@ -14,6 +14,8 @@ export class SearchComponent implements OnInit {
   @Input() lines : Array<Line>;
   @Input() columnIDs : Array<string>;
   @Input() fileType : string;
+
+  @Output() commandClick: EventEmitter<any> = new EventEmitter();
 
 
 
@@ -71,6 +73,10 @@ export class SearchComponent implements OnInit {
 
   followUp(line, key) {
     
+  }
+
+  onCommandClick(event) {
+    this.commandClick.emit(event.target.innerText);
   }
 
   ngOnInit(): void {
