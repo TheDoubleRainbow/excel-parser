@@ -3,8 +3,6 @@
 }
 
 .result-variant {
-    display: flex; 
-    border: 2px solid lightyellow;
     transition-duration: .3s;
 }
 
@@ -14,11 +12,20 @@
     cursor: pointer;
 }
 
-.result-variant:hover {
-    border-color: lightskyblue;
+.table.is-striped .result-variant:hover {
+    background-color: lightblue;
+    cursor: pointer;
 }
 
 .column-select {
     padding: 3px;
     border: 1px solid gray;
+}
+
+.search, .default-columns {
+    margin: 10px 0;
+}
+
+.is-follow-up-cell {
+    background-color: yellow;
 }

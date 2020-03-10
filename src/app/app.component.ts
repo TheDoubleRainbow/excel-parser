@@ -14,6 +14,7 @@ export class AppComponent {
   selectedName: string;
   lines: Array<Line>;
   columnIDs: Array<string>;
+  fileType: string;
 
   onFileUpload(event: any) {
     if(event.target.files.length !== 1) {
@@ -21,6 +22,7 @@ export class AppComponent {
     }
 
     const file = event.target.files[0];
+    this.fileType = file.name.includes('Audio') ? 'audio' : file.name.includes('Phone') ? 'phone' : 'Unknown';
     const reader = new FileReader();
     reader.onload = (e: any) => {
       const binary = e.target.result;
