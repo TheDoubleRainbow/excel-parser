@@ -8,4 +8,5 @@
     <option *ngFor="let name of sheetNames" class="sheet-name">{{name}}</option>
   </select>
   <button (click)="parseSheetLines()">Parse lines</button>
+  <app-search [lines] = "lines" [columnIDs] = "columnIDs"></app-search>
 </div>

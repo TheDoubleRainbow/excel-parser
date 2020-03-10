@@ -1,0 +1,24 @@
+.search-box {
+    padding-top: 20px;
+}
+
+.result-variant {
+    display: flex; 
+    border: 2px solid lightyellow;
+    transition-duration: .3s;
+}
+
+.column {
+    max-height: 150px;
+    overflow-y: auto;
+    cursor: pointer;
+}
+
+.result-variant:hover {
+    border-color: lightskyblue;
+}
+
+.column-select {
+    padding: 3px;
+    border: 1px solid gray;
+}
