@@ -1,8 +1,10 @@
 <div *ngIf="lines" class="search-box">
     <input (change) = "onSearchType($event)" type="text" class="input search" placeholder="Search"/>
-
+    <div class="filter">
+        <span>Select columns to display: </span><span *ngFor="let item of columnIDs" class="column-select"><input type="checkbox" />{{item}}</span>
+    </div>
     <div class="result">
-        <table *ngIf="result.length > 1" class="table is-fullwidth resultMany">
+        <table *ngIf="result?.length > 1" class="table is-fullwidth resultMany">
             <tr *ngFor="let line of result" class="result-variant">
                 <td>{{line.row}}</td><td *ngFor="let key of objectKeys(line.columns)" class="column">{{line.columns[key]}}</td>
             </tr>

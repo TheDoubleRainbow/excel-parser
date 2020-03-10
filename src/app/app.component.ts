@@ -13,6 +13,7 @@ export class AppComponent {
   sheets: any;
   selectedName: string;
   lines: Array<Line>;
+  columnIDs: Array<string>;
 
   onFileUpload(event: any) {
     if(event.target.files.length !== 1) {
@@ -52,7 +53,7 @@ export class AppComponent {
       }
     }
     
-    const columnIDs = Object.keys(columnIDsMap).sort();
+    this.columnIDs = Object.keys(columnIDsMap).sort();
 
     for(let i = 0; i < keys.length; i++) {
       if(!this.isIndex(keys[i])) { continue; }
@@ -76,10 +77,10 @@ export class AppComponent {
     for(let i = 1; i < this.lines.length; i++) {
       let line = this.lines[i];
 
-      for(let j = 0; j < columnIDs.length; j++) {
-        let id = columnIDs[j];
+      for(let j = 0; j < this.columnIDs.length; j++) {
+        let id = this.columnIDs[j];
         if(!line.columns[id]) {
-          if(this.lines[i-1] && this.lines[i-1].columns[id]) {
+          if(this.lines[i-1] && this.lines[i-1].columns[id] && (id === 'G' || id === 'H')) {
             line.columns[id] = this.lines[i-1].columns[id];
           }
           else {
@@ -88,7 +89,6 @@ export class AppComponent {
         }
       }
     }
-
 
   }
 }

@@ -11,6 +11,7 @@ export class SearchComponent implements OnInit {
   constructor() { }
 
   @Input() lines : Array<Line>;
+  @Input() columnIDs : Array<string>;
 
   result: Array<Line>;
 
@@ -26,7 +27,8 @@ export class SearchComponent implements OnInit {
     for(let i = 1; i < this.lines.length; i++) {
       const line = this.lines[i];
       for(let [key, value] of Object.entries(line.columns)) {
-        if((value as any).includes(query)){
+        let cellContent:string = value+'';
+        if(cellContent.toUpperCase().includes(query.toUpperCase())){
           result.push(line);
           break;
         }
