@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Line } from './../types';
+import { HeadersConfig, DefaultFilters } from './../settings';
 
 @Component({
   selector: 'app-search',
@@ -12,8 +13,17 @@ export class SearchComponent implements OnInit {
 
   @Input() lines : Array<Line>;
   @Input() columnIDs : Array<string>;
+  @Input() fileType : string;
+
+
+
+  displayableIDs = {};
+  defaultFilters = DefaultFilters;
+  headers = HeadersConfig;
+  filter: any = this.defaultFilters.phone;
 
   result: Array<Line>;
+  lastQuery: string;
 
   onSearchType(event: any): void {
     let query = event.target.value;
@@ -23,6 +33,7 @@ export class SearchComponent implements OnInit {
   }
 
   search(query): Array<Line> {
+    this.lastQuery = query;
     let result: Array<Line> = [];
     for(let i = 1; i < this.lines.length; i++) {
       const line = this.lines[i];
@@ -42,6 +53,24 @@ export class SearchComponent implements OnInit {
     let keys = Object.keys(obj).sort();
 
     return keys
+  }
+
+  defaultFilter(type: string) {
+    if(type === 'audio') {
+      this.filter = this.defaultFilters.audio;
+    }
+    else if(type === 'phone'){
+      this.filter = this.defaultFilters.phone;
+    }
+    console.log(this.filter);
+  }
+
+  changeFilter(id) {
+    this.filter[id] = !this.filter[id];
+  }
+
+  followUp(line, key) {
+    
   }
 
   ngOnInit(): void {

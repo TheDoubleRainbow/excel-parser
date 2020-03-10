@@ -1,12 +1,12 @@
-<div>
+<div class="file-input-box">
   <input type="file" multiple="false" (change)="onFileUpload($event)" />
 </div>
 
-<div *ngIf="sheetNames">
+<div class="sheet-names-box" *ngIf="sheetNames">
   <h2>Sheet names</h2>
   <select (change) = "selectSheet($event)">
     <option *ngFor="let name of sheetNames" class="sheet-name">{{name}}</option>
   </select>
   <button (click)="parseSheetLines()">Parse lines</button>
-  <app-search [lines] = "lines" [columnIDs] = "columnIDs"></app-search>
+  <app-search [fileType] = "fileType" [lines] = "lines" [columnIDs] = "columnIDs"></app-search>
 </div>
