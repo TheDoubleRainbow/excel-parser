@@ -115,7 +115,9 @@ export class AppComponent {
     }
     console.log(sheets, selectedName, lines, columnIDs, type);
   }
-  onCommandClick(event) {
-    console.log(event);
+
+  onCommandClick(event) {   
+    let findColumn = this.commandLines.filter(data => data.columns.B === event);
+    console.log(findColumn[0].columns);
   }
-}
+} 
