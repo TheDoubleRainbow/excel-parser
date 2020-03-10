@@ -1,0 +1,59 @@
+<div *ngIf="lines">
+  <h2>select top condition</h2>
+  <select (change)="selectFilter($event)">
+    <option *ngFor="let name of selectedFilterValue" class="sheet-name">{{
+      name
+      }}</option>
+  </select>
+  <button (click)="selectCondition()">Find condition</button>
+</div>
+
+
+<ng-template #template>
+  <div *ngFor="let table of mainFlow; index as index">
+    <div class="main">
+      <div class="main">
+        <div class="divTable redTable">
+          <div *ngIf="conditionListFollowUp" class="divTableHeading">
+            <div class="divTableHead">Context Name</div>
+            <div class="divTableHead">Command Id</div>
+            <div class="divTableHead">Final prompt Id</div>
+            <div class="divTableHead">Follow up context</div>
+            <div class="divTableHead">Action class</div>
+          </div>
+
+          <div *ngFor="let line of table.table" class="divTableBody">
+            <div class="divTableRow">
+              <div class="divTableCell">{{ line.B }}</div>
+              <div class="divTableCell">{{ line.G }}</div>
+              <div class="divTableCell">
+                {{ line.L }}
+              </div>
+              <div class="divTableCell">{{ line.P }}</div>
+
+              <div
+                (click)="insertView(line.O, index, line.P)"
+                class="divTableCell"
+                [ngClass]="{
+                                    cursor: line.O === 'Follow-Up',
+                                    'color-yellow': line.O === 'Follow-Up',
+                                    'color-green': line.O === 'Task Complete'
+                                }"
+              >
+                {{ line.O }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2>{{ table.nextFollowUp }}</h2>
+
+      <button (click)="selectConditionForFollowUp()">
+        Find condition
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-container #viewContainer></ng-container>

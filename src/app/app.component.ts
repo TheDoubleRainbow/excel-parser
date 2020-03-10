@@ -1,7 +1,12 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 
 import * as xlsx from 'xlsx';
-import { Line, LineRenderType } from './types';
+import { Line } from './types';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +20,6 @@ export class AppComponent {
   selectedValue: string;
   selectedFilterValue: Line[];
   lines: Array<Line>;
-  conditionList: Array<LineRenderType>;
 
   onFileUpload(event: any) {
     if (event.target.files.length !== 1) {
@@ -27,7 +31,7 @@ export class AppComponent {
     reader.onload = (e: any) => {
       const binary = e.target.result;
       const wb: xlsx.WorkBook = xlsx.read(binary, { type: 'binary' });
-      console.log(wb);
+      // console.log(wb);
       this.sheetNames = wb.SheetNames;
       this.sheets = wb.Sheets;
     };
@@ -92,7 +96,7 @@ export class AppComponent {
       }
     }
 
-    console.log(columnIDs, this.lines);
+    // console.log(columnIDs, this.lines);
 
     for (let i = 1; i < this.lines.length; i++) {
       let line = this.lines[i];
@@ -109,28 +113,8 @@ export class AppComponent {
       }
     }
 
-    console.log(this.lines);
+    // console.log(this.lines);
 
     this.listOfTopCondition();
-  }
-
-  selectCondition() {
-    this.conditionList = this.lines.reduce((acc, line) => {
-      if (line.columns.B === this.selectedValue) {
-        acc = acc.concat({
-          B: line.columns.B,
-          G: line.columns.G,
-          L: line.columns.L,
-          O: line.columns.O,
-          P: line.columns.P,
-        });
-      }
-      return acc;
-    }, []);
-    console.log('conditionList', this.conditionList);
-  }
-
-  selectSubCondition(val: string){
-    console.log('val', val);
   }
 }

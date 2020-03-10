@@ -1,0 +1,68 @@
+.main{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+
+div.redTable {
+  border: 2px solid #A40808;
+  background-color: #EEE7DB;
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+}
+.divTable.redTable .divTableCell, .divTable.redTable .divTableHead {
+  border: 1px solid #AAAAAA;
+  padding: 3px 2px;
+}
+.divTable.redTable .divTableBody .divTableCell {
+  font-size: 13px;
+}
+.divTable.redTable .divTableRow:nth-child(even) {
+  background: #F5C8BF;
+}
+.divTable.redTable .divTableHeading {
+  background: #A40808;
+}
+.divTable.redTable .divTableHeading .divTableHead {
+  font-size: 16px;
+  font-weight: bold;
+  color: #FFFFFF;
+  text-align: center;
+  border-left: 2px solid #A40808;
+}
+.divTable.redTable .divTableHeading .divTableHead:first-child {
+  border-left: none;
+}
+
+
+.redTable.outerTableFooter {
+  border-top: none;
+}
+.redTable.outerTableFooter .tableFootStyle {
+  padding: 3px 5px;
+}
+
+
+.divTable{ display: table; }
+.divTableRow { display: table-row; }
+.divTableHeading { display: table-header-group;}
+.divTableCell, .divTableHead { display: table-cell;}
+.divTableHeading { display: table-header-group;}
+.divTableBody { display: table-row-group;}
+
+
+.cursor {
+  cursor: pointer;
+}
+
+.color-green {
+  color: green;
+  font-weight: bold;
+}
+
+.color-yellow {
+  color: yellow;
+  font-weight: bold;
+}
