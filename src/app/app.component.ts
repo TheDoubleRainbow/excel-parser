@@ -24,6 +24,8 @@ export class AppComponent {
     search: false,
     followUp: false,
   }
+  findColumn: Array<Line>; 
+  modalActive: boolean;
 
   onFileUpload(event: any, type: string) {
     if (event.target.files.length !== 1) {
@@ -150,11 +152,17 @@ export class AppComponent {
     console.log('lines===>', this.lines);
     console.log('selectedFilterValue===>', this.selectedFilterValue);
   }
-  onCommandClick(event) {
-    console.log(event);
-    // console.log(this.lines);
-  }
+
   spoil(name: string){
     this.isSpoiled[name] = !this.isSpoiled[name];
   }
-}
+
+  onCommandClick(event) {  
+    this.findColumn = this.commandLines.filter(data => data.columns.B === event); 
+    this.modalActive = true;
+  }
+
+  onPopupClose() {
+    this.modalActive = false;
+  }
+} 

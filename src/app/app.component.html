@@ -46,3 +46,5 @@
     <app-search [fileType] = "fileType" [lines] = "lines" [columnIDs] = "columnIDs" (commandClick)="onCommandClick($event)"></app-search>
   </div>
 </div>
+
+<app-popup [commandColumnIDs] = "commandColumnIDs" [commandLines] = "findColumn" [isModalActive] = "modalActive" (popupClose)="onPopupClose()"></app-popup>

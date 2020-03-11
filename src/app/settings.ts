@@ -25,3 +25,14 @@ export const HeadersConfig = {
       V: 'Function Control', W: 'Remarks', X: 'Change Tracking'
     },
 };
+
+export const HeadersMapping = {
+  A: 'App',	
+  B: 'Command ID',
+  C: 'New Command Example',
+  D: 'Topic',
+  E: 'Slots', 
+  F: 'Max of Category',
+  G: 'White List',
+  H: 'Note'
+}
