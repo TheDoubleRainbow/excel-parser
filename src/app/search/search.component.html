@@ -1,9 +1,11 @@
 <div *ngIf="lines" class="search-box">
     <div class="filter">
         <span>Select columns to display: </span>
-        <span *ngFor="let item of columnIDs" class="tag is-light">
-            <input type="checkbox" [checked] = "filter[item]" (click) = "changeFilter(item)" />{{item}}
-        </span>
+        <div class="criterias">
+            <span *ngFor="let item of columnIDs" class="tag filter-criteria"  (click) = "changeFilter(item)" [class] = "filter[item] ? 'is-primary' : 'is-light'">
+                {{headers[fileType][item]}}
+            </span>
+        </div>
         <div class="default-columns">
             <span>Display default for </span> <span class="tag is-primary" (click) = "defaultFilter('phone')">Phone</span>
              or <span class="tag is-primary" (click) = "defaultFilter('audio')">Audio</span>
