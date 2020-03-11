@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FollowUpComponent } from './follow-up.component';
+import { FollowUpFlowComponent } from './follow-up-flow.component';
 
-describe('FollowUpComponent', () => {
-  let component: FollowUpComponent;
-  let fixture: ComponentFixture<FollowUpComponent>;
+describe('FollowUpFlowComponent', () => {
+  let component: FollowUpFlowComponent;
+  let fixture: ComponentFixture<FollowUpFlowComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FollowUpComponent ]
+      declarations: [ FollowUpFlowComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FollowUpComponent);
+    fixture = TestBed.createComponent(FollowUpFlowComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

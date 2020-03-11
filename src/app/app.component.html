@@ -35,3 +35,12 @@
     <app-search [fileType] = "fileType" [lines] = "lines" [columnIDs] = "columnIDs" (commandClick)="onCommandClick($event)"></app-search>
   </div>
 </div>
+
+<div class="box-wrap">
+  <div class="sheet-names-box">
+    <app-follow-up-flow
+        [lines]="lines"
+        [selectedFilterValue]="selectedFilterValue"
+    ></app-follow-up-flow>
+  </div>
+</div>

@@ -3,8 +3,9 @@
 @import 'bulma';
 
 body {
-    background-color: #eee;
-    min-height: 100vh;
+  background-color: #eee;
+  min-height: 100vh;
 
-    padding: 20px;
+  padding: 20px;
+  overflow-x: auto;
 }
