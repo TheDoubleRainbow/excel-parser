@@ -1,0 +1,40 @@
+<div *ngIf="lines" class="search-box">
+    <div class="filter">
+        <span>Select columns to display: </span>
+        <span *ngFor="let item of columnIDs" class="tag is-light">
+            <input type="checkbox" [checked] = "filter[item]" (click) = "changeFilter(item)" />{{item}}
+        </span>
+        <div class="default-columns">
+            <span>Display default for </span> <span class="tag is-primary" (click) = "defaultFilter('phone')">Phone</span>
+             or <span class="tag is-primary" (click) = "defaultFilter('audio')">Audio</span>
+        </div>
+    </div>
+    <input (change) = "onSearchType($event)" type="text" class="input search" placeholder="Search"/>
+    <div class="result">
+        <table *ngIf="result?.length > 1" class="table is-striped is-fullwidth">
+            <thead>
+                <th>line ID</th>
+                <ng-container *ngFor="let item of columnIDs">
+                    <th *ngIf="filter[item]">{{headers[fileType][item]}}</th>
+                </ng-container>
+            </thead>
+            <tbody>
+                <tr *ngFor="let line of result" class="result-variant">
+                    <td>{{line.row}}</td>
+                    <ng-container *ngFor="let key of objectKeys(line.columns)">
+                        <td *ngIf="filter[key] && line.columns[key] === 'Follow-Up'" (click) = "followUp(line, key)" class="is-follow-up-cell">
+                            {{line.columns[key]}}
+                        </td>
+                        <td *ngIf="filter[key] && line.columns[key] != 'Follow-Up' && key === 'G'" (click) = "onCommandClick($event)">
+                            {{line.columns[key]}}
+                        </td>
+                        <td *ngIf="filter[key] && line.columns[key] != 'Follow-Up' && key != 'G'">
+                            {{line.columns[key]}}
+                        </td>
+                    </ng-container>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>

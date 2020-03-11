@@ -1,15 +1,15 @@
-<div>
-    <input type="file" multiple="false" (change)="onFileUpload($event)" />
+<div class="file-input-box">
+  <input type="file" multiple="false" (change)="onFileUpload($event, 'vui')" />
+  <input type="file" multiple="false" (change)="onFileUpload($event, 'commands')" />
 </div>
 
-<div *ngIf="sheetNames">
-    <h2>Sheet names</h2>
-    <select (change)="selectSheet($event)">
-        <option *ngFor="let name of sheetNames" class="sheet-name">{{
-            name
-        }}</option>
-    </select>
-    <button (click)="parseSheetLines()">Parse lines</button>
+<div class="sheet-names-box" *ngIf="sheetNames">
+  <h2>Sheet names</h2>
+  <select (change) = "selectSheet($event)">
+    <option *ngFor="let name of sheetNames" class="sheet-name">{{name}}</option>
+  </select>
+  <button (click)="parseSheetLines(sheets, selectedName, lines, columnIDs, 'vui')">Parse lines</button>
+  <app-search [fileType] = "fileType" [lines] = "lines" [columnIDs] = "columnIDs" (commandClick)="onCommandClick($event)"></app-search>
 </div>
 
 <app-follow-up-flow

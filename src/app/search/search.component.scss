@@ -1,0 +1,35 @@
+.search-box {
+    padding-top: 20px;
+}
+
+.result-variant {
+    transition-duration: .3s;
+}
+
+.column {
+    max-height: 150px;
+    overflow-y: auto;
+    cursor: pointer;
+}
+
+.table.is-striped .result-variant:hover {
+    background-color: lightblue;
+    cursor: pointer;
+}
+
+.column-select {
+    padding: 3px;
+    border: 1px solid gray;
+}
+
+.search, .default-columns {
+    margin: 10px 0;
+}
+
+.is-follow-up-cell {
+    background-color: yellow;
+}
+
+.tag {
+    cursor: pointer;
+}

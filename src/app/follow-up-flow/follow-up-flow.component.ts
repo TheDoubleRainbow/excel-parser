@@ -1,7 +1,9 @@
 import {
   Component,
   Input,
+  OnChanges,
   OnInit,
+  SimpleChanges,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
@@ -13,34 +15,22 @@ import { Line, LineRenderType } from '../types';
   templateUrl: './follow-up-flow.component.html',
   styleUrls: ['./follow-up-flow.component.scss'],
 })
-export class FollowUpFlowComponent implements OnInit {
-  constructor() {}
-  ngOnInit(): void {}
-
+export class FollowUpFlowComponent {
   @Input() lines: Array<Line>;
   @Input() selectedFilterValue: Array<Line>;
+
+  constructor() {}
+
   selectedValue: string;
   selectedNextFollowUp: string;
-  conditionListFollowUp: Array<Line> = [];
-  @ViewChild('viewContainer', { read: ViewContainerRef })
-  viewContainer: ViewContainerRef;
-  @ViewChild('template') template: TemplateRef<any>;
-
   mainFlow: Array<{ table: Array<LineRenderType>; nextFollowUp: string }> = [];
-
-  // ngOnChanges(selectedFilterValue) {
-  //   if (selectedFilterValue) {
-  //     this.mainFlow = [];
-  //   }
-  // }
-
-  ngOnChanges() {}
 
   selectFilter(event: any) {
     this.selectedValue = event.target.value;
   }
 
-  selectCondition() {
+  selectCondition(nextFollowUp?: string) {
+    this.mainFlow = [];
     const table = this.lines.reduce((acc, line) => {
       if (line.columns.B.toLowerCase() === this.selectedValue.toLowerCase()) {
         acc = acc.concat({
@@ -54,11 +44,10 @@ export class FollowUpFlowComponent implements OnInit {
       return acc;
     }, []);
 
-    this.conditionListFollowUp = this.conditionListFollowUp.concat(table);
-
-    this.mainFlow = this.mainFlow.concat({ table });
-    const template = this.template.createEmbeddedView(null);
-    this.viewContainer.insert(template);
+    this.mainFlow = this.mainFlow.concat({
+      table,
+      nextFollowUp: nextFollowUp || '',
+    });
   }
 
   insertView(name: string, index: number, nextCondition: string) {
@@ -73,6 +62,7 @@ export class FollowUpFlowComponent implements OnInit {
   }
 
   selectConditionForFollowUp() {
+    console.log('mainflow', this.mainFlow);
     const table = this.lines.reduce((acc, line) => {
       if (
         line.columns.B.toLowerCase() === this.selectedNextFollowUp.toLowerCase()
@@ -88,6 +78,7 @@ export class FollowUpFlowComponent implements OnInit {
       return acc;
     }, []);
 
-    this.mainFlow = this.mainFlow.concat({ table });
+    this.mainFlow = this.mainFlow.concat({ table, nextFollowUp: '' });
+    console.log('mainflow', this.mainFlow);
   }
 }
