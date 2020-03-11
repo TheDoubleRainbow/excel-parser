@@ -118,7 +118,9 @@ export class AppComponent {
       this.commandColumnIDs = columnIDs;
     }
 
-    this.isSpoiled.file = true;
+    if(type === 'vui') {
+      this.isSpoiled.file = true;
+    }
   }
   onCommandClick(event) {
     console.log(event);
