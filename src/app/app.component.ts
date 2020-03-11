@@ -18,6 +18,10 @@ export class AppComponent {
   commandLines: Array<Line>;
   selectedName: string;
   fileType: string;
+  isSpoiled = {
+    file: false,
+    search: false,
+  }
 
   onFileUpload(event: any, type: string) {
     if(event.target.files.length !== 1) {
@@ -45,6 +49,7 @@ export class AppComponent {
 
   selectSheet(event: any) {
     this.selectedName = event.target.value;
+    this.parseSheetLines(this.sheets, this.selectedName, this.lines, this.columnIDs, 'vui')
   }
 
   isIndex(index: string) {
@@ -52,7 +57,6 @@ export class AppComponent {
   }
 
   parseSheetLines(sheets, selectedName, lines, columnIDs, type) {
-    console.log(sheets, selectedName, lines, columnIDs, type);
     let keys = Object.keys(sheets[selectedName]);
     lines = [];
     let columnIDsMap = {};
@@ -113,9 +117,13 @@ export class AppComponent {
       this.commandLines = lines;
       this.commandColumnIDs = columnIDs;
     }
-    console.log(sheets, selectedName, lines, columnIDs, type);
+
+    this.isSpoiled.file = true;
   }
   onCommandClick(event) {
     console.log(event);
+  }
+  spoil(name: string){
+    this.isSpoiled[name] = !this.isSpoiled[name];
   }
 }

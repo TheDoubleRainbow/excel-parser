@@ -32,4 +32,14 @@
 
 .tag {
     cursor: pointer;
+    transition-duration: .3s;
+}
+
+.filter-criteria {
+    margin: 5px;
+}
+
+.criterias {
+    display: flex;
+    flex-wrap: wrap;
 }
