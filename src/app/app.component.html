@@ -11,3 +11,5 @@
   <button (click)="parseSheetLines(sheets, selectedName, lines, columnIDs, 'vui')">Parse lines</button>
   <app-search [fileType] = "fileType" [lines] = "lines" [columnIDs] = "columnIDs" (commandClick)="onCommandClick($event)"></app-search>
 </div>
+
+<app-popup [commandColumnIDs] = "commandColumnIDs" [commandLines] = "findColumn" [isModalActive] = "modalActive" (popupClose)="onPopupClose()"></app-popup>

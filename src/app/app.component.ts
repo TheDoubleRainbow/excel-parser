@@ -18,6 +18,8 @@ export class AppComponent {
   commandLines: Array<Line>;
   selectedName: string;
   fileType: string;
+  findColumn: Array<Line>; 
+  modalActive: boolean;
 
   onFileUpload(event: any, type: string) {
     if(event.target.files.length !== 1) {
@@ -116,8 +118,12 @@ export class AppComponent {
     console.log(sheets, selectedName, lines, columnIDs, type);
   }
 
-  onCommandClick(event) {   
-    let findColumn = this.commandLines.filter(data => data.columns.B === event);
-    console.log(findColumn[0].columns);
+  onCommandClick(event) {  
+    this.findColumn = this.commandLines.filter(data => data.columns.B === event); 
+    this.modalActive = true;
+  }
+
+  onPopupClose() {
+    this.modalActive = false;
   }
 } 

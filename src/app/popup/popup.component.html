@@ -1,1 +1,25 @@
-<p>popup works!</p>
+<div *ngIf="commandLines" [ngClass]="{ 'is-active' : isModalActive }" class="modal">
+    <div class="modal-background" (click)="toggleModal()"></div>
+    <div class="modal-content">
+        <h2>Modal Title</h2>   
+
+        <table *ngIf="commandLines?.length > 0" class="table is-striped is-fullwidth">    
+            <thead>
+                <th>line ID</th>
+                <ng-container *ngFor="let item of commandColumnIDs">
+                    <th>{{headers[item]}}</th>
+                </ng-container>
+            </thead>   
+            <tbody>
+                <tr *ngFor="let line of commandLines" class="result-variant">
+                    <td>{{line.row}}</td>
+                    <ng-container *ngFor="let key of objectKeys(line.columns)">
+                        <td *ngIf="line.columns[key]">{{line.columns[key]}}</td>                  
+                    </ng-container>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button class="modal-close is-large" aria-label="close" (click)="toggleModal()"></button>
+</div>
