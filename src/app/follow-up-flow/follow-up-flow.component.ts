@@ -25,6 +25,16 @@ export class FollowUpFlowComponent {
   selectedNextFollowUp: string;
   mainFlow: Array<{ table: Array<LineRenderType>; nextFollowUp: string }> = [];
 
+  followUpBoxStyle: {
+    top: string;
+    left: string;
+    position?: string;
+  } = {
+    top: '0px',
+    left: '0px',
+    position: 'absolute',
+  };
+
   selectFilter(event: any) {
     this.selectedValue = event.target.value;
   }
@@ -50,7 +60,20 @@ export class FollowUpFlowComponent {
     });
   }
 
-  insertView(name: string, index: number, nextCondition: string) {
+  onClickFollowUp(
+    event: any,
+    name: string,
+    index: number,
+    nextCondition: string,
+  ) {
+    console.log('event', event);
+
+    // this.followUpBoxStyle = {
+    //   ...this.followUpBoxStyle,
+    //   top: `${event.clientY - event.offsetY}px`,
+    //   left: `${event.clientX + event.offsetX}px`,
+    // };
+
     this.selectedNextFollowUp = nextCondition;
 
     if (index !== this.mainFlow.length - 1) {

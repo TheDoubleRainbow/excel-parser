@@ -7,7 +7,6 @@ import { AppComponent } from './app.component';
 import { FollowUpFlowComponent } from './follow-up-flow/follow-up-flow.component';
 import { SearchComponent } from './search/search.component';
 import { SheetComponent } from './sheet/sheet.component';
-import { FollowUpComponent } from './follow-up/follow-up.component';
 import { PopupComponent } from './popup/popup.component';
 
 @NgModule({
@@ -16,7 +15,6 @@ import { PopupComponent } from './popup/popup.component';
     FollowUpFlowComponent,
     SearchComponent,
     SheetComponent,
-    FollowUpComponent,
     PopupComponent
   ],
   imports: [

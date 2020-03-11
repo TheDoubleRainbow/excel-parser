@@ -31,7 +31,14 @@
                             <div class="divTableCell">{{ line.P }}</div>
 
                             <div
-                                (click)="insertView(line.O, index, line.P)"
+                                (click)="
+                                    onClickFollowUp(
+                                        $event,
+                                        line.O,
+                                        index,
+                                        line.P
+                                    )
+                                "
                                 class="divTableCell"
                                 [ngClass]="{
                                     cursor: line.O === 'Follow-Up',
@@ -45,18 +52,20 @@
                     </div>
                 </div>
             </div>
-            <div class="right-block">
-                <h2 class="padding-right-10">{{ table.nextFollowUp }}</h2>
+            <div [ngStyle]="followUpBoxStyle">
+                <div class="main">
+                    <h6 class="padding-right-10">{{ table.nextFollowUp }}</h6>
 
-                <button
-                    [ngClass]="{
-                        disabled: !table.nextFollowUp
-                    }"
-                    class="button is-warning"
-                    (click)="selectConditionForFollowUp()"
-                >
-                    Find condition
-                </button>
+                    <button
+                        [ngClass]="{
+                            disabled: !table.nextFollowUp
+                        }"
+                        class="button is-warning"
+                        (click)="selectConditionForFollowUp()"
+                    >
+                        Find condition
+                    </button>
+                </div>
             </div>
         </div>
     </div>
