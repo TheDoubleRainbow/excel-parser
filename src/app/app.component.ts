@@ -22,6 +22,7 @@ export class AppComponent {
   isSpoiled = {
     file: false,
     search: false,
+    followUp: false,
   }
 
   onFileUpload(event: any, type: string) {

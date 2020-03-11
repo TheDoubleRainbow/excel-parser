@@ -26,6 +26,17 @@
   </div>
 </div>
 
+<div class="box-wrap">
+  <div class="follow-up-box box" *ngIf="lines" [class]="{'spoiled' : isSpoiled.followUp}">
+    <div class="spoiler" (click) = "spoil('followUp')">
+      <span class="spoiler-switch">{{isSpoiled.followUp ? '+' : '-'}}</span> Follow-Up
+    </div>
+    <app-follow-up-flow
+        [lines]="lines"
+        [selectedFilterValue]="selectedFilterValue"
+    ></app-follow-up-flow>
+  </div>
+</div>
 
 <div class="box-wrap">
   <div class="search-box box"  *ngIf="lines" [class]="{'spoiled' : isSpoiled.search}">
@@ -33,14 +44,5 @@
       <span class="spoiler-switch">{{isSpoiled.search ? '+' : '-'}}</span> Search
     </div>
     <app-search [fileType] = "fileType" [lines] = "lines" [columnIDs] = "columnIDs" (commandClick)="onCommandClick($event)"></app-search>
-  </div>
-</div>
-
-<div class="box-wrap">
-  <div class="sheet-names-box">
-    <app-follow-up-flow
-        [lines]="lines"
-        [selectedFilterValue]="selectedFilterValue"
-    ></app-follow-up-flow>
   </div>
 </div>
