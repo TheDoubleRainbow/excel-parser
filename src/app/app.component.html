@@ -1,15 +1,50 @@
-<div class="file-input-box">
-  <input type="file" multiple="false" (change)="onFileUpload($event, 'vui')" />
-  <input type="file" multiple="false" (change)="onFileUpload($event, 'commands')" />
+<div class="box-wrap">
+  <div class="spoiler" (click) = "spoil('file')">
+    <span class="spoiler-switch">{{isSpoiled.file ? '+' : '-'}}</span> Files
+  </div>
+  <div class="file-input-box box" [class]="{'spoiled' : isSpoiled.file}">
+    <div>
+      <h2 class="subtitle">Load files:</h2>
+      <div class="file-inputs">
+        <div class="file">
+          <span>Transition table</span><input type="file" multiple="false" (change)="onFileUpload($event, 'vui')" />
+        </div>
+        <div class="file">
+          <span>Command mapping</span><input type="file" multiple="false" (change)="onFileUpload($event, 'commands')" />
+        </div>
+      </div>
+    </div>
+    <hr />
+    <div class="sheet-selector" *ngIf="sheetNames">
+      <h2 class="subtitle">Select sheet</h2>
+      <div class="select">
+        <select (change) = "selectSheet($event)">
+          <option *ngFor="let name of sheetNames" class="sheet-name">{{name}}</option>
+        </select>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="sheet-names-box" *ngIf="sheetNames">
-  <h2>Sheet names</h2>
-  <select (change) = "selectSheet($event)">
-    <option *ngFor="let name of sheetNames" class="sheet-name">{{name}}</option>
-  </select>
-  <button (click)="parseSheetLines(sheets, selectedName, lines, columnIDs, 'vui')">Parse lines</button>
-  <app-search [fileType] = "fileType" [lines] = "lines" [columnIDs] = "columnIDs" (commandClick)="onCommandClick($event)"></app-search>
+<div class="box-wrap">
+  <div class="follow-up-box box" *ngIf="lines" [class]="{'spoiled' : isSpoiled.followUp}">
+    <div class="spoiler" (click) = "spoil('followUp')">
+      <span class="spoiler-switch">{{isSpoiled.followUp ? '+' : '-'}}</span> Follow-Up
+    </div>
+    <app-follow-up-flow
+        [lines]="lines"
+        [selectedFilterValue]="selectedFilterValue"
+    ></app-follow-up-flow>
+  </div>
+</div>
+
+<div class="box-wrap">
+  <div class="search-box box"  *ngIf="lines" [class]="{'spoiled' : isSpoiled.search}">
+    <div class="spoiler" (click) = "spoil('search')">
+      <span class="spoiler-switch">{{isSpoiled.search ? '+' : '-'}}</span> Search
+    </div>
+    <app-search [fileType] = "fileType" [lines] = "lines" [columnIDs] = "columnIDs" (commandClick)="onCommandClick($event)"></app-search>
+  </div>
 </div>
 
 <app-popup [commandColumnIDs] = "commandColumnIDs" [commandLines] = "findColumn" [isModalActive] = "modalActive" (popupClose)="onPopupClose()"></app-popup>

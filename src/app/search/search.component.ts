@@ -8,6 +8,7 @@ import { HeadersConfig, DefaultFilters } from './../settings';
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit {
+  
 
   constructor() { }
 
@@ -80,6 +81,10 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  ngOnChanges() {
+    console.log('change')
   }
 
 }
