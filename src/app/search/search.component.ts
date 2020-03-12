@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChange } from '@angular/core';
 import { Line } from './../types';
 import { HeadersConfig, DefaultFilters } from './../settings';
 
@@ -24,14 +24,18 @@ export class SearchComponent implements OnInit {
   defaultFilters = DefaultFilters;
   headers = HeadersConfig;
   filter: any = this.defaultFilters.phone;
-
   result: Array<Line>;
   lastQuery: string;
+  allContext = 'All contexts';
+  selectedContext: string = this.allContext;
+  contextList: Array<string> = [this.allContext];
 
   onSearchType(event: any): void {
     let query = event.target.value;
     if(query.length > 3) {
+      this.selectedContext = this.allContext;
       this.result = this.search(query);
+      this.buildContextsList();
     }
   }
 
@@ -76,15 +80,29 @@ export class SearchComponent implements OnInit {
     
   }
 
-  onCommandClick(event) {
-    this.commandClick.emit(event.target.innerText);
+  onCommandClick(value: string) {
+    this.commandClick.emit(value);
   }
 
-  ngOnInit(): void {
+  filterByContext(event: any) {
+    this.selectedContext = event.target.value;
+  }
+
+  buildContextsList() {
+    let contextMap = {};
+    this.result.map(el => {
+      if(!contextMap[el.columns.B]) {
+        contextMap[el.columns.B] = true;
+      }
+    });
+    this.contextList = [this.allContext ,...Object.keys(contextMap)];
   }
 
   ngOnChanges() {
-    console.log('change')
+    
+  }
+
+  ngOnInit(): void {
   }
 
 }

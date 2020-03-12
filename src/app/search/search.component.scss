@@ -9,12 +9,10 @@
 .column {
     max-height: 150px;
     overflow-y: auto;
-    cursor: pointer;
 }
 
 .table.is-striped .result-variant:hover {
     background-color: lightblue;
-    cursor: pointer;
 }
 
 .column-select {
@@ -42,4 +40,8 @@
 .criterias {
     display: flex;
     flex-wrap: wrap;
+}
+
+.is-follow-up-cell, .is-command-cell {
+    cursor: pointer;
 }
