@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Line } from './../types';
-import { HeadersMapping } from './../settings';
+import { HeadersMapping, SlotsHeadersMapping } from './../settings';
 
 @Component({
   selector: 'app-popup',
@@ -15,10 +15,12 @@ export class PopupComponent implements OnInit {
   @Output() popupClose: EventEmitter<any> = new EventEmitter();
 
   headers = HeadersMapping;  
+  slotsHeaders = SlotsHeadersMapping;  
+  slotsHeadersKeys = Object.keys(SlotsHeadersMapping);
 
-  objectKeys(obj): Array<any> {
-    let keys = Object.keys(obj).sort();
-
+  objectKeys(obj): Array<any> {   
+    let keys = Object.keys(obj).sort();   
+   
     return keys;
   }
 

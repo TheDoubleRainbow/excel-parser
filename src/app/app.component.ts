@@ -154,7 +154,42 @@ export class AppComponent {
   }
 
   onCommandClick(event) {  
-    this.findColumn = this.commandLines.filter(data => data.columns.B === event); 
+    this.findColumn = this.commandLines.filter(data => {
+      if (data.columns.B === event) {     
+        
+        data.columns = Object.keys(data.columns).reduce((object, key) => {         
+
+          if (key == 'B' || key == 'D' || key == 'E') {
+            object[key] = data.columns[key];
+          }  
+
+          if (key == 'E') {   
+            object[key] = object[key].split(',').map((item, key) => {               
+              if (item.includes('=')) {  
+                return {
+                  name: item.split('=')[0],
+                  sep: '=',
+                  value: item.split('=')[1]
+                }
+              } else {
+                return {
+                  name: item,
+                  sep: '',
+                  value: ''
+                }
+              }                                     
+            }, {});                 
+          }
+
+          return object
+        }, {});         
+        
+        this.commandColumnIDs = Object.keys(data.columns);  
+        
+        return data;
+      }
+    });     
+
     this.modalActive = true;
   }
 

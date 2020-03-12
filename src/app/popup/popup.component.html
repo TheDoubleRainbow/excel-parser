@@ -14,7 +14,19 @@
                 <tr *ngFor="let line of commandLines" class="result-variant">
                     <td>{{line.row}}</td>
                     <ng-container *ngFor="let key of objectKeys(line.columns)">
-                        <td *ngIf="line.columns[key]">{{line.columns[key]}}</td>                  
+                        <td *ngIf="line.columns[key] && key != 'E'">{{line.columns[key]}}</td>        
+                        <td *ngIf="key == 'E'">
+                            <tr>
+                                <ng-container *ngFor="let item of slotsHeadersKeys">
+                                    <th>{{slotsHeaders[item]}}</th>
+                                </ng-container>
+                            </tr>
+                            <tr *ngFor="let item of line.columns[key]">
+                                <ng-container *ngFor="let key of objectKeys(item)">
+                                    <td>{{item[key]}}</td>
+                                </ng-container>
+                            </tr>                              
+                        </td>                               
                     </ng-container>
                 </tr>
             </tbody>
