@@ -81,7 +81,7 @@ export class SearchComponent implements OnInit {
   }
 
   onCommandClick(value: string) {
-    this.commandClick.emit(value);
+    this.commandClick.emit(value );
   }
 
   filterByContext(event: any) {
