@@ -27,8 +27,8 @@
     </div>
     <div *ngIf="fileName || commandFileName" class="file-list">
       <h2 class="subtitle">Files loaded:</h2>
-      <span *ngIf="fileName"><span class="checkmark">&#10004;</span> {{fileName}}</span><br />
-      <span *ngIf="commandFileName"><span class="checkmark">&#10004;</span> {{commandFileName}}</span>
+      <span *ngIf="fileName"><span class="checkmark">&#10004;</span> <span class="filename">{{fileName}}</span> with <span class="filename">{{selectedName}}</span> sheet</span><br />
+      <span *ngIf="commandFileName"><span class="checkmark">&#10004;</span>  <span class="filename">{{commandFileName}}</span></span>
     </div>
   </div>
 </div>
