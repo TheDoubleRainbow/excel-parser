@@ -21,6 +21,7 @@ export class AppComponent {
   fileType: string;
   findColumn: Array<Line>; 
   modalActive: boolean;
+  modalHasContent: boolean = false;
   isSpoiled = {
     file: false,
     search: false,
@@ -169,56 +170,61 @@ export class AppComponent {
 
     if(type === 'vui') {
       this.isSpoiled.file = true;
-    }
 
-    this.selectedFilterValue = this.lines.reduce((acc, item) => {
-      if (item.columns.B && !acc.includes(item.columns.B)) {
-        acc.push(item.columns.B);
-      }
-      return acc;
-    }, []);
+      this.selectedFilterValue = this.lines.reduce((acc, item) => {
+        if (item.columns.B && !acc.includes(item.columns.B)) {
+          acc.push(item.columns.B);
+        }
+        return acc;
+      }, []);
+    }   
 
-    console.log('lines===>', this.lines);
-    console.log('selectedFilterValue===>', this.selectedFilterValue);
+    //console.log('lines===>', this.lines);
+    //console.log('selectedFilterValue===>', this.selectedFilterValue);
   }
 
-  onCommandClick(event) {  
-    this.findColumn = this.commandLines.filter(data => {
-      if (data.columns.B === event) {     
-        
-        data.columns = Object.keys(data.columns).reduce((object, key) => {         
+  onCommandClick(event) {      
+    if (this.commandLines) {  
+      this.modalHasContent = true;
 
-          if (key == 'B' || key == 'D' || key == 'E') {
-            object[key] = data.columns[key];
-          }  
+      this.findColumn = this.commandLines.filter(data => {
+        if (data.columns.B === event) {     
+          
+          data.columns = Object.keys(data.columns).reduce((object, key) => {    
+            
+            if (key == 'B' || key == 'D' || key == 'E') {
+              object[key] = data.columns[key];
+            }     
 
-          if (key == 'E') {   
-            object[key] = object[key].split(',').map((item, key) => {               
-              if (item.includes('=')) {  
-                return {
-                  name: item.split('=')[0],
-                  sep: '=',
-                  value: item.split('=')[1]
-                }
-              } else {
-                return {
-                  name: item,
-                  sep: '',
-                  value: ''
-                }
-              }                                     
-            }, {});                 
-          }
+            if (key == 'E' && typeof object['E'] !== 'object') { 
+              object[key] = object[key].split(',').map((item, key) => {               
+                if (item.includes('=')) {  
+                  return {
+                    name: item.split('=')[0],
+                    sep: '=',
+                    value: item.split('=')[1]
+                  }
+                } else {
+                  return {
+                    name: item,
+                    sep: '',
+                    value: ''
+                  }
+                }                                     
+              }, {});                 
+            }
 
-          return object
-        }, {});         
-        
-        this.commandColumnIDs = Object.keys(data.columns);  
-        
-        return data;
-      }
-    });     
+            return object
+          }, {});         
+          
+          this.commandColumnIDs = Object.keys(data.columns);  
+          
+          return data;
+        }
+      });         
+    } 
 
+    this.modalActive = true;
     localStorage.setItem('selectedFilterValue', JSON.stringify(this.selectedFilterValue));
   }
 

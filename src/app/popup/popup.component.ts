@@ -11,6 +11,7 @@ export class PopupComponent implements OnInit {
   @Input() commandColumnIDs: Array<string>;
   @Input() commandLines: Array<Line>;
   @Input() isModalActive: boolean;
+  @Input() isModalHasContent: boolean;
 
   @Output() popupClose: EventEmitter<any> = new EventEmitter();
 
@@ -18,7 +19,7 @@ export class PopupComponent implements OnInit {
   slotsHeaders = SlotsHeadersMapping;  
   slotsHeadersKeys = Object.keys(SlotsHeadersMapping);
 
-  objectKeys(obj): Array<any> {   
+  objectKeys(obj): Array<any> {    
     let keys = Object.keys(obj).sort();   
    
     return keys;
