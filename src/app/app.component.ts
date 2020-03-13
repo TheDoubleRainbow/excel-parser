@@ -26,6 +26,7 @@ export class AppComponent {
     file: false,
     search: false,
     followUp: false,
+    diffChecker: true,
   } 
   fileName: string;
   commandFileName: string;

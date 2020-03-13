@@ -55,6 +55,15 @@
   </div>
 </div>
 
+<div class="box-wrap">
+  <div class="search-box box"  *ngIf="lines" [class]="{'spoiled' : isSpoiled.diffChecker}">
+    <div class="spoiler" (click) = "spoil('diffChecker')">
+      <span class="spoiler-switch">{{isSpoiled.diffChecker ? '+' : '-'}}</span> Diff Checker
+    </div>
+    <app-diff-checker></app-diff-checker>
+  </div>
+</div>
+
 <app-popup 
   [isModalActive] = "modalActive" 
   [isModalHasContent] = "modalHasContent" 
