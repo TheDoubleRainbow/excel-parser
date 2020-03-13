@@ -24,7 +24,7 @@ export class SearchComponent implements OnInit {
   displayableIDs = {};
   defaultFilters = DefaultFilters;
   headers = HeadersConfig;
-  filter: any = this.fileType === 'phone' ? this.defaultFilters.phone : this.defaultFilters.audio;
+  filter: any = this.defaultFilters.phone;
   result: Array<Line>;
   lastQuery: string;
   allContext = 'All contexts';
@@ -100,7 +100,7 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnChanges() {
-    
+    this.filter = this.fileType === 'audio' ? this.defaultFilters.audio : this.defaultFilters.phone;
   }
 
   ngOnInit(): void {

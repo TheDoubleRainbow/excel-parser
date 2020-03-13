@@ -260,6 +260,7 @@ export class AppComponent {
       this.columnIDs = vuiParsed.columnIDs;
       this.fileType = commonParsed.fileType;
       this.fileName = commonParsed.fileName;
+      console.log(this.lines);
     }
     if(savedCommand) {
       const commandParsed = JSON.parse(savedCommand);
