@@ -4,6 +4,10 @@
 
 .result-variant {
     transition-duration: .3s;
+
+    td {
+        max-width: 350px;
+    }
 }
 
 .column {

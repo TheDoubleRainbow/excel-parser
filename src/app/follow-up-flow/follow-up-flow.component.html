@@ -2,7 +2,7 @@
     <br />
     <h2 class="subtitle">Select top condition</h2>
     <div class="select">
-        <select (change)="selectFilter($event)">
+        <select (change)="selectFilter($event)" [(ngModel)]="selectedValue">
             <option *ngFor="let name of selectedFilterValue" class="sheet-name">{{
                 name
             }}</option>

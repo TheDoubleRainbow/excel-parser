@@ -17,13 +17,14 @@ export class SearchComponent implements OnInit {
   @Input() fileType : string;
 
   @Output() commandClick: EventEmitter<any> = new EventEmitter();
+  @Output() followUpClick: EventEmitter<any> = new EventEmitter();
 
 
 
   displayableIDs = {};
   defaultFilters = DefaultFilters;
   headers = HeadersConfig;
-  filter: any = this.defaultFilters.phone;
+  filter: any = this.fileType === 'phone' ? this.defaultFilters.phone : this.defaultFilters.audio;
   result: Array<Line>;
   lastQuery: string;
   allContext = 'All contexts';
@@ -76,8 +77,8 @@ export class SearchComponent implements OnInit {
     this.filter[id] = !this.filter[id];
   }
 
-  followUp(line, key) {
-    
+  followUp(line) {
+    this.followUpClick.emit({line});
   }
 
   onCommandClick(value: string) {

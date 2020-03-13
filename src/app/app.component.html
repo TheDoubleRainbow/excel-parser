@@ -41,6 +41,7 @@
     <app-follow-up-flow
         [lines]="lines"
         [selectedFilterValue]="selectedFilterValue"
+        [followUpFromSearch]="followUpFromSearch"
     ></app-follow-up-flow>
   </div>
 </div>
@@ -50,7 +51,7 @@
     <div class="spoiler" (click) = "spoil('search')">
       <span class="spoiler-switch">{{isSpoiled.search ? '+' : '-'}}</span> Search
     </div>
-    <app-search [fileType] = "fileType" [lines] = "lines" [columnIDs] = "columnIDs" (commandClick)="onCommandClick($event)"></app-search>
+    <app-search [fileType] = "fileType" [lines] = "lines" [columnIDs] = "columnIDs" (commandClick)="onCommandClick($event)" (followUpClick)="onFollowUp($event)"></app-search>
   </div>
 </div>
 

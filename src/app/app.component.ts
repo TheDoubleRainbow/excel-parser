@@ -29,6 +29,7 @@ export class AppComponent {
   fileName: string;
   commandFileName: string;
   loadedFromLocalStorage: boolean = false;
+  followUpFromSearch: any;
 
   onFileUpload(event: any, type: string) {
     if (event.target.files.length !== 1) {
@@ -226,6 +227,18 @@ export class AppComponent {
       this.commandColumnIDs = commandParsed.columnIDs;
       this.commandFileName = commonParsed.commandFileName;
     }
+  }
+
+  onFollowUp({line}) {
+    const followUpData:any = {};
+    if(this.fileType === 'audio') {
+      followUpData.followContext = line.columns['P'];
+    }
+    else {
+      followUpData.followContext = line.columns['O'];
+    }
+    this.followUpFromSearch = followUpData;
+    this.isSpoiled['search'] = true;
   }
 
   ngOnInit() {

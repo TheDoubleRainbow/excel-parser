@@ -30,7 +30,7 @@
                     <tr *ngIf="selectedContext === allContext || line.columns['B'] === selectedContext" class="result-variant">
                         <td>{{line.row}}</td>
                         <ng-container *ngFor="let key of objectKeys(line.columns)">
-                            <td *ngIf="filter[key] && line.columns[key] === 'Follow-Up'" (click) = "followUp(line, key)" class="is-follow-up-cell">
+                            <td *ngIf="filter[key] && line.columns[key] === 'Follow-Up'" (click) = "followUp(line)" class="is-follow-up-cell">
                                 {{line.columns[key]}}
                             </td>
                             <td *ngIf="filter[key] && line.columns[key] != 'Follow-Up' && key === 'G'" class="is-command-cell" (click) = "onCommandClick(line.columns[key])">
