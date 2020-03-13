@@ -28,8 +28,20 @@
     margin: 10px 0;
 }
 
+.is-follow-up-cell, .is-complete-cell {
+    font-weight: bold;
+}
+
 .is-follow-up-cell {
-    background-color: yellow;
+    background-color: lightyellow;
+}
+
+.is-complete-cell {
+    background-color: lightgreen;
+}
+
+.is-error-cell {
+    background-color: crimson;
 }
 
 .tag {
