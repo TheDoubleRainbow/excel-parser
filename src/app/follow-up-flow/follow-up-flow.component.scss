@@ -4,42 +4,32 @@
   align-items: center;
 }
 
-div.redTable {
-  border: 2px solid #a40808;
-  background-color: #eee7db;
+div.follow-table {
+  border: none;
+  background-color: none;
   width: 100%;
   text-align: center;
   border-collapse: collapse;
 }
-.divTable.redTable .divTableCell,
-.divTable.redTable .divTableHead {
-  border: 1px solid #aaaaaa;
-  padding: 3px 2px;
+.divTable.follow-table .divTableCell,
+.divTable.follow-table .divTableHead {
+  padding: 5px 10px;
 }
-.divTable.redTable .divTableBody .divTableCell {
+.divTable.follow-table .divTableBody .divTableCell {
   font-size: 13px;
 }
-.divTable.redTable .divTableRow:nth-child(even) {
-  background: #f5c8bf;
+.divTable.follow-table .divTableHeading {
+  background: none;
+  border-bottom: 2px solid #bbb;
 }
-.divTable.redTable .divTableHeading {
-  background: #a40808;
-}
-.divTable.redTable .divTableHeading .divTableHead {
+.divTable.follow-table .divTableHeading .divTableHead {
   font-size: 16px;
   font-weight: bold;
-  color: #ffffff;
+  color: #000;
   text-align: center;
-  border-left: 2px solid #a40808;
+  padding: 5px 10px;
 }
-.divTable.redTable .divTableHeading .divTableHead:first-child {
-  border-left: none;
-}
-
-.redTable.outerTableFooter {
-  border-top: none;
-}
-.redTable.outerTableFooter .tableFootStyle {
+.follow-table.outerTableFooter .tableFootStyle {
   padding: 3px 5px;
 }
 
@@ -48,6 +38,7 @@ div.redTable {
 }
 .divTableRow {
   display: table-row;
+  border-bottom: 1px solid #bbb;
 }
 .divTableHeading {
   display: table-header-group;
@@ -68,12 +59,12 @@ div.redTable {
 }
 
 .color-green {
-  color: green;
+  background: lightgreen;
   font-weight: bold;
 }
 
 .color-yellow {
-  color: yellow;
+  background: lightyellow;
   font-weight: bold;
 }
 
