@@ -185,7 +185,8 @@ export class AppComponent {
     this.isSpoiled[name] = !this.isSpoiled[name];
   }
 
-  onCommandClick(event) {  
+  onCommandClick(event) {
+    console.log(this.commandLines);
     this.findColumn = this.commandLines.filter(data => data.columns.B === event); 
     this.modalActive = true;
   }
@@ -211,6 +212,7 @@ export class AppComponent {
 
     if(savedVui) {
       const vuiParsed = JSON.parse(savedVui);
+      vuiParsed.lines.splice(0,1);
       this.lines = vuiParsed.lines;
       this.selectedName = vuiParsed.selectedName;
       this.columnIDs = vuiParsed.columnIDs;
@@ -219,7 +221,9 @@ export class AppComponent {
     }
     if(savedCommand) {
       const commandParsed = JSON.parse(savedCommand);
-      this.commandLines = commandParsed.commandLines;
+      commandParsed.lines.splice(0, 1);
+      this.commandLines = commandParsed.lines;
+      this.commandColumnIDs = commandParsed.columnIDs;
       this.commandFileName = commonParsed.commandFileName;
     }
   }
