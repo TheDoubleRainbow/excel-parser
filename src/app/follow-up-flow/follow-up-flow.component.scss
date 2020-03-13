@@ -7,7 +7,6 @@
 div.redTable {
   border: 2px solid #a40808;
   background-color: #eee7db;
-  width: 100%;
   text-align: center;
   border-collapse: collapse;
 }
@@ -45,6 +44,7 @@ div.redTable {
 
 .divTable {
   display: table;
+  width: 710px;
 }
 .divTableRow {
   display: table-row;
@@ -79,11 +79,21 @@ div.redTable {
 
 .right-block {
   display: flex;
-  padding: 0 20px;
+  padding: 0 10px;
   align-items: center;
   position: absolute;
 }
 
-.padding-right-10 {
+.followUpTitle {
+  font-size: 12px;
   padding-right: 10px;
+  font-weight: bold;
+}
+
+.block {
+  word-break: break-word;
+}
+
+.flex {
+  display: flex;
 }
