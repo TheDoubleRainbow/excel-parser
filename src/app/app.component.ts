@@ -25,37 +25,22 @@ export class AppComponent {
     file: false,
     search: false,
     followUp: false,
-  }
+  } 
+  fileName: string;
+  commandFileName: string;
+  loadedFromLocalStorage: boolean = false;
 
   onFileUpload(event: any, type: string) {
     if (event.target.files.length !== 1) {
       return;
     }
 
+    this.loadedFromLocalStorage = false;
+
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.onload = (e: any) => {
-      const binary = e.target.result;
-      const wb: xlsx.WorkBook = xlsx.read(binary, { type: 'binary' });
-      console.log(wb);
-      if (type === 'vui') {
-        this.sheetNames = wb.SheetNames;
-        this.sheets = wb.Sheets;
-        this.fileType = file.name.includes('Audio')
-          ? 'audio'
-          : file.name.includes('Phone')
-          ? 'phone'
-          : 'Unknown';
-      } else if (type === 'commands') {
-        this.commandSheets = wb.Sheets;
-        this.parseSheetLines(
-          this.commandSheets,
-          'Mapping',
-          this.commandLines,
-          this.commandColumnIDs,
-          'commands',
-        );
-      }
+      this.parseFile(e, file, type);
     };
     reader.readAsBinaryString(file);
   }
@@ -63,6 +48,33 @@ export class AppComponent {
   selectSheet(event: any) {
     this.selectedName = event.target.value;
     this.parseSheetLines(this.sheets, this.selectedName, this.lines, this.columnIDs, 'vui')
+  }
+
+  parseFile(e: any, file: File, type:string) {
+    const binary = e.target.result;
+    const wb: xlsx.WorkBook = xlsx.read(binary, { type: 'binary' });
+    console.log(wb);
+    if (type === 'vui') {
+      this.fileName = file.name;
+      this.lines = undefined;
+      this.sheetNames = wb.SheetNames;
+      this.sheets = wb.Sheets;
+      this.fileType = file.name.includes('Audio')
+        ? 'audio'
+        : file.name.includes('Phone')
+        ? 'phone'
+        : 'Unknown';
+    } else if (type === 'commands') {
+      this.commandFileName = file.name;
+      this.commandSheets = wb.Sheets;
+      this.parseSheetLines(
+        this.commandSheets,
+        'Mapping',
+        this.commandLines,
+        this.commandColumnIDs,
+        'commands',
+      );
+    }
   }
 
   isIndex(index: string) {
@@ -131,17 +143,34 @@ export class AppComponent {
       this.selectedName = selectedName;
       this.lines = lines;
       this.columnIDs = columnIDs;
+      const vuiSaved = {
+        selectedName: this.selectedName,
+        lines: this.lines,
+        columnIDs: this.columnIDs,
+      };
+      localStorage.setItem('vuiLines', JSON.stringify(vuiSaved));
     } else {
       this.commandSheets = sheets;
       this.commandLines = lines;
       this.commandColumnIDs = columnIDs;
+      const commandSaved = {
+        lines: this.commandLines,
+        columnIDs: this.commandColumnIDs,
+      };
+      localStorage.setItem('commandLines', JSON.stringify(commandSaved));
     }
+
+    const savedCommon = {
+      fileType: this.fileType,
+      fileName: this.fileName,
+      commandFileName: this.commandFileName,
+    }
+    localStorage.setItem('common', JSON.stringify(savedCommon));
 
     if(type === 'vui') {
       this.isSpoiled.file = true;
     }
 
-    console.log('lines===>', this.lines);
     this.selectedFilterValue = this.lines.reduce((acc, item) => {
       if (item.columns.B && !acc.includes(item.columns.B)) {
         acc.push(item.columns.B);
@@ -190,14 +219,51 @@ export class AppComponent {
       }
     });     
 
-    this.modalActive = true;
+    localStorage.setItem('selectedFilterValue', JSON.stringify(this.selectedFilterValue));
+  }
+
+  spoil(name: string){
+    this.isSpoiled[name] = !this.isSpoiled[name];
   }
 
   onPopupClose() {
     this.modalActive = false;
   }
 
-  spoil(name: string) {
-    this.isSpoiled[name] = !this.isSpoiled[name];
+  checkSavedData() {
+    const savedVui = localStorage.getItem('vuiLines');
+    const savedCommand = localStorage.getItem('commandLines');
+    const savedCommon = localStorage.getItem('common');
+    const selectedFilterValue = localStorage.getItem('selectedFilterValue');
+    console.log(savedCommon, selectedFilterValue)
+    if(!savedCommon || !selectedFilterValue) {
+      return
+    }
+
+    this.loadedFromLocalStorage = true;
+
+    const commonParsed = JSON.parse(savedCommon);
+    this.selectedFilterValue = JSON.parse(selectedFilterValue);
+
+    if(savedVui) {
+      const vuiParsed = JSON.parse(savedVui);
+      vuiParsed.lines.splice(0,1);
+      this.lines = vuiParsed.lines;
+      this.selectedName = vuiParsed.selectedName;
+      this.columnIDs = vuiParsed.columnIDs;
+      this.fileType = commonParsed.fileType;
+      this.fileName = commonParsed.fileName;
+    }
+    if(savedCommand) {
+      const commandParsed = JSON.parse(savedCommand);
+      commandParsed.lines.splice(0, 1);
+      this.commandLines = commandParsed.lines;
+      this.commandColumnIDs = commandParsed.columnIDs;
+      this.commandFileName = commonParsed.commandFileName;
+    }
+  }
+
+  ngOnInit() {
+    this.checkSavedData();
   }
 } 

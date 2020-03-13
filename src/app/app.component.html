@@ -7,21 +7,28 @@
       <h2 class="subtitle">Load files:</h2>
       <div class="file-inputs">
         <div class="file">
-          <span>Transition table</span><input type="file" multiple="false" (change)="onFileUpload($event, 'vui')" />
+          <span>Transition table</span>
+          <input type="file" multiple="false" (change)="onFileUpload($event, 'vui')" />
         </div>
         <div class="file">
-          <span>Command mapping</span><input type="file" multiple="false" (change)="onFileUpload($event, 'commands')" />
+          <span>Command mapping</span>
+          <input type="file" multiple="false" (change)="onFileUpload($event, 'commands')" />
         </div>
       </div>
     </div>
-    <hr />
-    <div class="sheet-selector" *ngIf="sheetNames">
+    <hr *ngIf="sheetNames" />
+    <div class="sheet-selector" *ngIf="sheetNames && !loadedFromLocalStorage">
       <h2 class="subtitle">Select sheet</h2>
       <div class="select">
         <select (change) = "selectSheet($event)">
           <option *ngFor="let name of sheetNames" class="sheet-name">{{name}}</option>
         </select>
       </div>
+    </div>
+    <div *ngIf="fileName || commandFileName" class="file-list">
+      <h2 class="subtitle">Files loaded:</h2>
+      <span *ngIf="fileName"><span class="checkmark">&#10004;</span> <span class="filename">{{fileName}}</span> with <span class="filename">{{selectedName}}</span> sheet</span><br />
+      <span *ngIf="commandFileName"><span class="checkmark">&#10004;</span>  <span class="filename">{{commandFileName}}</span></span>
     </div>
   </div>
 </div>

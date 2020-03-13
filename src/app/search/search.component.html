@@ -11,6 +11,11 @@
              or <span class="tag is-primary" (click) = "defaultFilter('audio')">Audio</span>
         </div>
     </div>
+    <div class="select">  
+        <select (change) = "filterByContext($event)">
+            <option *ngFor="let context of contextList">{{context}}</option>
+        </select>
+    </div>
     <input (change) = "onSearchType($event)" type="text" class="input search" placeholder="Search"/>
     <div class="result">
         <table *ngIf="result?.length > 1" class="table is-striped is-fullwidth">
@@ -21,20 +26,22 @@
                 </ng-container>
             </thead>
             <tbody>
-                <tr *ngFor="let line of result" class="result-variant">
-                    <td>{{line.row}}</td>
-                    <ng-container *ngFor="let key of objectKeys(line.columns)">
-                        <td *ngIf="filter[key] && line.columns[key] === 'Follow-Up'" (click) = "followUp(line, key)" class="is-follow-up-cell">
-                            {{line.columns[key]}}
-                        </td>
-                        <td *ngIf="filter[key] && line.columns[key] != 'Follow-Up' && key === 'G'" (click) = "onCommandClick($event)">
-                            {{line.columns[key]}}
-                        </td>
-                        <td *ngIf="filter[key] && line.columns[key] != 'Follow-Up' && key != 'G'">
-                            {{line.columns[key]}}
-                        </td>
-                    </ng-container>
-                </tr>
+                <ng-container *ngFor="let line of result">
+                    <tr *ngIf="selectedContext === allContext || line.columns['B'] === selectedContext" class="result-variant">
+                        <td>{{line.row}}</td>
+                        <ng-container *ngFor="let key of objectKeys(line.columns)">
+                            <td *ngIf="filter[key] && line.columns[key] === 'Follow-Up'" (click) = "followUp(line, key)" class="is-follow-up-cell">
+                                {{line.columns[key]}}
+                            </td>
+                            <td *ngIf="filter[key] && line.columns[key] != 'Follow-Up' && key === 'G'" class="is-command-cell" (click) = "onCommandClick(line.columns[key])">
+                                {{line.columns[key]}} <i class="fa fa-question-circle"></i>
+                            </td>
+                            <td *ngIf="filter[key] && line.columns[key] != 'Follow-Up' && key != 'G'">
+                                {{line.columns[key]}}
+                            </td>
+                        </ng-container>
+                    </tr>
+                </ng-container>
             </tbody>
         </table>
     </div>
