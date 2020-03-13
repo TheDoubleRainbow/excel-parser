@@ -26,13 +26,14 @@ export const HeadersConfig = {
     },
 };
 
-export const HeadersMapping = {
-  A: 'App',	
-  B: 'Command ID',
-  C: 'New Command Example',
+export const HeadersMapping = { 
+  B: 'Command ID', 
   D: 'Topic',
-  E: 'Slots', 
-  F: 'Max of Category',
-  G: 'White List',
-  H: 'Note'
+  E: 'Slots',  
+}
+
+export const SlotsHeadersMapping = { 
+  0: 'Name', 
+  1: '',
+  2: 'Value',  
 }

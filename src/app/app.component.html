@@ -55,4 +55,10 @@
   </div>
 </div>
 
-<app-popup [commandColumnIDs] = "commandColumnIDs" [commandLines] = "findColumn" [isModalActive] = "modalActive" (popupClose)="onPopupClose()"></app-popup>
+<app-popup 
+  [isModalActive] = "modalActive" 
+  [isModalHasContent] = "modalHasContent" 
+  [commandColumnIDs] = "commandColumnIDs" 
+  [commandLines] = "findColumn"   
+  (popupClose)="onPopupClose()"
+></app-popup>
