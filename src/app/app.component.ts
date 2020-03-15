@@ -19,42 +19,65 @@ export class AppComponent {
   commandColumnIDs: Array<string>;
   commandLines: Array<Line>;
   fileType: string;
+  findColumn: Array<Line>; 
+  modalActive: boolean;
+  modalHasContent: boolean = false;
+  isSpoiled = {
+    file: false,
+    search: false,
+    followUp: false,
+    diffChecker: true,
+  } 
+  fileName: string;
+  commandFileName: string;
+  loadedFromLocalStorage: boolean = false;
+  followUpFromSearch: any;
 
   onFileUpload(event: any, type: string) {
     if (event.target.files.length !== 1) {
       return;
     }
 
+    this.loadedFromLocalStorage = false;
+
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.onload = (e: any) => {
-      const binary = e.target.result;
-      const wb: xlsx.WorkBook = xlsx.read(binary, { type: 'binary' });
-      console.log(wb);
-      if (type === 'vui') {
-        this.sheetNames = wb.SheetNames;
-        this.sheets = wb.Sheets;
-        this.fileType = file.name.includes('Audio')
-          ? 'audio'
-          : file.name.includes('Phone')
-          ? 'phone'
-          : 'Unknown';
-      } else if (type === 'commands') {
-        this.commandSheets = wb.Sheets;
-        this.parseSheetLines(
-          this.commandSheets,
-          'Mapping',
-          this.commandLines,
-          this.commandColumnIDs,
-          'commands',
-        );
-      }
+      this.parseFile(e, file, type);
     };
     reader.readAsBinaryString(file);
   }
 
   selectSheet(event: any) {
     this.selectedName = event.target.value;
+    this.parseSheetLines(this.sheets, this.selectedName, this.lines, this.columnIDs, 'vui')
+  }
+
+  parseFile(e: any, file: File, type:string) {
+    const binary = e.target.result;
+    const wb: xlsx.WorkBook = xlsx.read(binary, { type: 'binary' });
+    console.log(wb);
+    if (type === 'vui') {
+      this.fileName = file.name;
+      this.lines = undefined;
+      this.sheetNames = wb.SheetNames;
+      this.sheets = wb.Sheets;
+      this.fileType = file.name.includes('Audio')
+        ? 'audio'
+        : file.name.includes('Phone')
+        ? 'phone'
+        : 'Unknown';
+    } else if (type === 'commands') {
+      this.commandFileName = file.name;
+      this.commandSheets = wb.Sheets;
+      this.parseSheetLines(
+        this.commandSheets,
+        'Mapping',
+        this.commandLines,
+        this.commandColumnIDs,
+        'commands',
+      );
+    }
   }
 
   isIndex(index: string) {
@@ -62,7 +85,6 @@ export class AppComponent {
   }
 
   parseSheetLines(sheets, selectedName, lines, columnIDs, type) {
-    console.log(sheets, selectedName, lines, columnIDs, type);
     let keys = Object.keys(sheets[selectedName]);
     lines = [];
     let columnIDsMap = {};
@@ -124,26 +146,145 @@ export class AppComponent {
       this.selectedName = selectedName;
       this.lines = lines;
       this.columnIDs = columnIDs;
+      const vuiSaved = {
+        selectedName: this.selectedName,
+        lines: this.lines,
+        columnIDs: this.columnIDs,
+      };
+      localStorage.setItem('vuiLines', JSON.stringify(vuiSaved));
     } else {
       this.commandSheets = sheets;
       this.commandLines = lines;
       this.commandColumnIDs = columnIDs;
+      const commandSaved = {
+        lines: this.commandLines,
+        columnIDs: this.commandColumnIDs,
+      };
+      localStorage.setItem('commandLines', JSON.stringify(commandSaved));
     }
-    console.log(sheets, selectedName, lines, columnIDs, type);
 
-    console.log('lines===>', this.lines);
-    this.selectedFilterValue = this.lines.reduce((acc, item) => {
-      if (item.columns.B && !acc.includes(item.columns.B)) {
-        acc.push(item.columns.B);
-      }
-      return acc;
-    }, []);
+    const savedCommon = {
+      fileType: this.fileType,
+      fileName: this.fileName,
+      commandFileName: this.commandFileName,
+    }
+    localStorage.setItem('common', JSON.stringify(savedCommon));
 
-    console.log('lines===>', this.lines);
-    console.log('selectedFilterValue===>', this.selectedFilterValue);
+    if(type === 'vui') {
+      this.isSpoiled.file = true;
+
+      this.selectedFilterValue = this.lines.reduce((acc, item) => {
+        if (item.columns.B && !acc.includes(item.columns.B)) {
+          acc.push(item.columns.B);
+        }
+        return acc;
+      }, []);
+    }   
+
+    //console.log('lines===>', this.lines);
+    //console.log('selectedFilterValue===>', this.selectedFilterValue);
   }
-  onCommandClick(event) {
-    console.log(event);
-    // console.log(this.lines);
+
+  onCommandClick(event) {      
+    if (this.commandLines) {  
+      this.modalHasContent = true;
+
+      this.findColumn = this.commandLines.filter(data => {
+        if (data.columns.B === event) {     
+          
+          data.columns = Object.keys(data.columns).reduce((object, key) => {    
+            
+            if (key == 'B' || key == 'D' || key == 'E') {
+              object[key] = data.columns[key];
+            }     
+
+            if (key == 'E' && typeof object['E'] !== 'object') { 
+              object[key] = object[key].split(',').map((item, key) => {               
+                if (item.includes('=')) {  
+                  return {
+                    name: item.split('=')[0],
+                    sep: '=',
+                    value: item.split('=')[1]
+                  }
+                } else {
+                  return {
+                    name: item,
+                    sep: '',
+                    value: ''
+                  }
+                }                                     
+              }, {});                 
+            }
+
+            return object
+          }, {});         
+          
+          this.commandColumnIDs = Object.keys(data.columns);  
+          
+          return data;
+        }
+      });         
+    } 
+
+    this.modalActive = true;
+    localStorage.setItem('selectedFilterValue', JSON.stringify(this.selectedFilterValue));
   }
-}
+
+  spoil(name: string){
+    this.isSpoiled[name] = !this.isSpoiled[name];
+  }
+
+  onPopupClose() {
+    this.modalActive = false;
+  }
+
+  checkSavedData() {
+    const savedVui = localStorage.getItem('vuiLines');
+    const savedCommand = localStorage.getItem('commandLines');
+    const savedCommon = localStorage.getItem('common');
+    const selectedFilterValue = localStorage.getItem('selectedFilterValue');
+    console.log(savedCommon, selectedFilterValue)
+    if(!savedCommon || !selectedFilterValue) {
+      return
+    }
+
+    this.loadedFromLocalStorage = true;
+
+    const commonParsed = JSON.parse(savedCommon);
+    this.selectedFilterValue = JSON.parse(selectedFilterValue);
+
+    if(savedVui) {
+      const vuiParsed = JSON.parse(savedVui);
+      vuiParsed.lines.splice(0,1);
+      this.lines = vuiParsed.lines;
+      this.selectedName = vuiParsed.selectedName;
+      this.columnIDs = vuiParsed.columnIDs;
+      this.fileType = commonParsed.fileType;
+      this.fileName = commonParsed.fileName;
+      console.log(this.lines);
+    }
+    if(savedCommand) {
+      const commandParsed = JSON.parse(savedCommand);
+      commandParsed.lines.splice(0, 1);
+      this.commandLines = commandParsed.lines;
+      this.commandColumnIDs = commandParsed.columnIDs;
+      this.commandFileName = commonParsed.commandFileName;
+    }
+  }
+
+  onFollowUp({line}) {
+    const followUpData:any = {};
+    if(this.fileType === 'audio') {
+      followUpData.followContext = line.columns['P'];
+    }
+    else {
+      followUpData.followContext = line.columns['O'];
+    }
+    this.followUpFromSearch = followUpData;
+    this.isSpoiled['search'] = true;
+  }
+
+  ngOnInit() {
+    this.checkSavedData();
+  }
+} 

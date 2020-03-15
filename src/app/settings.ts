@@ -25,3 +25,15 @@ export const HeadersConfig = {
       V: 'Function Control', W: 'Remarks', X: 'Change Tracking'
     },
 };
+
+export const HeadersMapping = { 
+  B: 'Command ID', 
+  D: 'Topic',
+  E: 'Slots',  
+}
+
+export const SlotsHeadersMapping = { 
+  0: 'Name', 
+  1: '',
+  2: 'Value',  
+}

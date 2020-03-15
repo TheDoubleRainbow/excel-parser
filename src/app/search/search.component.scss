@@ -4,17 +4,19 @@
 
 .result-variant {
     transition-duration: .3s;
+
+    td {
+        max-width: 350px;
+    }
 }
 
 .column {
     max-height: 150px;
     overflow-y: auto;
-    cursor: pointer;
 }
 
 .table.is-striped .result-variant:hover {
     background-color: lightblue;
-    cursor: pointer;
 }
 
 .column-select {
@@ -26,10 +28,36 @@
     margin: 10px 0;
 }
 
+.is-follow-up-cell, .is-complete-cell {
+    font-weight: bold;
+}
+
 .is-follow-up-cell {
-    background-color: yellow;
+    background-color: lightyellow;
+}
+
+.is-complete-cell {
+    background-color: lightgreen;
+}
+
+.is-error-cell {
+    background-color: crimson;
 }
 
 .tag {
+    cursor: pointer;
+    transition-duration: .3s;
+}
+
+.filter-criteria {
+    margin: 5px;
+}
+
+.criterias {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.is-follow-up-cell, .is-command-cell {
     cursor: pointer;
 }

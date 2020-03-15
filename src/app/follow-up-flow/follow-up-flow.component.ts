@@ -10,9 +10,11 @@ import { log } from 'util';
 export class FollowUpFlowComponent {
   @Input() lines: Array<Line>;
   @Input() selectedFilterValue: Array<Line>;
+  @Input() followUpFromSearch:any;
+
   constructor() {}
 
-  selectedValue: string;
+  selectedValue: string = 'Context Name';
   selectedNextFollowUp: string;
   mainFlow: Array<{
     table: Array<LineRenderType>;
@@ -208,5 +210,12 @@ export class FollowUpFlowComponent {
 
   
     console.log('mainflow', this.mainFlow);
+  }
+
+  ngOnChanges(change: any) {
+    if(change.followUpFromSearch.currentValue) {
+      this.selectFilter({target: {value: this.followUpFromSearch.followContext}});
+      this.selectCondition();
+    }
   }
 }

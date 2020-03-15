@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChange } from '@angular/core';
 import { Line } from './../types';
 import { HeadersConfig, DefaultFilters } from './../settings';
 
@@ -8,6 +8,7 @@ import { HeadersConfig, DefaultFilters } from './../settings';
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit {
+  
 
   constructor() { }
 
@@ -16,6 +17,7 @@ export class SearchComponent implements OnInit {
   @Input() fileType : string;
 
   @Output() commandClick: EventEmitter<any> = new EventEmitter();
+  @Output() followUpClick: EventEmitter<any> = new EventEmitter();
 
 
 
@@ -23,14 +25,18 @@ export class SearchComponent implements OnInit {
   defaultFilters = DefaultFilters;
   headers = HeadersConfig;
   filter: any = this.defaultFilters.phone;
-
   result: Array<Line>;
   lastQuery: string;
+  allContext = 'All contexts';
+  selectedContext: string = this.allContext;
+  contextList: Array<string> = [this.allContext];
 
   onSearchType(event: any): void {
     let query = event.target.value;
     if(query.length > 3) {
+      this.selectedContext = this.allContext;
       this.result = this.search(query);
+      this.buildContextsList();
     }
   }
 
@@ -71,12 +77,30 @@ export class SearchComponent implements OnInit {
     this.filter[id] = !this.filter[id];
   }
 
-  followUp(line, key) {
-    
+  followUp(line) {
+    this.followUpClick.emit({line});
   }
 
-  onCommandClick(event) {
-    this.commandClick.emit(event.target.innerText);
+  onCommandClick(value: string) {
+    this.commandClick.emit(value );
+  }
+
+  filterByContext(event: any) {
+    this.selectedContext = event.target.value;
+  }
+
+  buildContextsList() {
+    let contextMap = {};
+    this.result.map(el => {
+      if(!contextMap[el.columns.B]) {
+        contextMap[el.columns.B] = true;
+      }
+    });
+    this.contextList = [this.allContext ,...Object.keys(contextMap)];
+  }
+
+  ngOnChanges() {
+    this.filter = this.fileType === 'audio' ? this.defaultFilters.audio : this.defaultFilters.phone;
   }
 
   ngOnInit(): void {

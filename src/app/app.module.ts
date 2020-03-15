@@ -8,6 +8,7 @@ import { FollowUpFlowComponent } from './follow-up-flow/follow-up-flow.component
 import { SearchComponent } from './search/search.component';
 import { SheetComponent } from './sheet/sheet.component';
 import { PopupComponent } from './popup/popup.component';
+import { DiffCheckerComponent } from './diff-checker/diff-checker.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { PopupComponent } from './popup/popup.component';
     FollowUpFlowComponent,
     SearchComponent,
     SheetComponent,
-    PopupComponent
+    PopupComponent,
+    DiffCheckerComponent
   ],
   imports: [
     BrowserModule,

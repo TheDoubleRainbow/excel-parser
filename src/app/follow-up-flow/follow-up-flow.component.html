@@ -1,11 +1,14 @@
 <div *ngIf="lines">
-    <h2>select top condition</h2>
-    <select (change)="selectFilter($event)">
-        <option *ngFor="let name of selectedFilterValue" class="sheet-name">{{
-            name
-        }}</option>
-    </select>
-    <button (click)="selectCondition()">Find condition</button>
+    <br />
+    <h2 class="subtitle">Select top condition</h2>
+    <div class="select">
+        <select (change)="selectFilter($event)" [(ngModel)]="selectedValue">
+            <option *ngFor="let name of selectedFilterValue" class="sheet-name">{{
+                name
+            }}</option>
+        </select>
+    </div>
+    <button class="button is-primary" (click)="selectCondition()">Find condition</button>
 </div>
 
 <div class="flex">

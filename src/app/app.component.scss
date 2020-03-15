@@ -15,3 +15,64 @@
 .file-input-box, .sheet-names-box {
     padding: 20px;
 }
+
+.sheet-selector {
+    margin-top: 10px;
+}
+
+.file-inputs {
+    width: 500px;
+    margin-top: 10px;
+}
+
+.file {
+    display: flex;
+    justify-content: space-between;
+}
+
+.box {
+    transition-duration: .5s;
+}
+
+.box.spoiled {
+    overflow: hidden;
+    height: 10px;
+    padding: 0;
+}
+
+.box-wrap {
+    position: relative;
+    margin: 40px 0;
+}
+
+.spoiler {
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    background: #efefef;
+    border-radius: 5px;
+    padding: 2px 20px;
+    box-shadow: 0px 0px 20px #ccc;
+    cursor: pointer;
+    user-select: none;
+
+    &-switch {
+       font-weight: bold; 
+    }
+}
+
+.file-list {
+    margin-top: 20px;
+
+    h2 {
+        margin-bottom: 10px;
+    }
+
+    .checkmark {
+        color: lightgreen;
+    }
+}
+
+.filename {
+    font-weight: 600;
+}
