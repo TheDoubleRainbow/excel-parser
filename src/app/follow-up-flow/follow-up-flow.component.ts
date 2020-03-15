@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { Line, LineRenderType } from '../types';
+import { log } from 'util';
 
 @Component({
   selector: 'app-follow-up-flow',
@@ -41,6 +42,7 @@ export class FollowUpFlowComponent {
     this.selectedValue = event.target.value;
   }
 
+
   selectCondition(nextFollowUp?: string) {
     this.mainFlow = [];
     const table = this.lines.reduce((acc, line) => {
@@ -59,8 +61,10 @@ export class FollowUpFlowComponent {
     this.mainFlow = this.mainFlow.concat({
       table,
       nextFollowUp: nextFollowUp || '',
+      display: 'inline-table',
     });
   }
+
 
   onClickFollowUp(
     event: any,
@@ -71,6 +75,8 @@ export class FollowUpFlowComponent {
     const div = document.getElementById('myDiv');
     const rect = div.getBoundingClientRect();
 
+    console.log(rect)
+
     const centerCell = event.srcElement.offsetHeight / 2;
 
     const h = event.srcElement.offsetHeight - event.offsetY;
@@ -80,14 +86,21 @@ export class FollowUpFlowComponent {
         ? event.srcElement.offsetHeight - h
         : event.srcElement.offsetHeight + h;
 
+       
+    const scrollHeigth = event.pageY - event.clientY
+    
+    const positionTop =`${event.pageY -
+      rect.top -
+      (event.offsetY > centerCell
+        ? event.srcElement.offsetHeight + h-centerCell
+        : event.srcElement.offsetHeight - h)-scrollHeigth}px`
+
     const positionStyle = {
       ...this.followUpBoxStyle,
-      top: `${event.pageY -
-        rect.top -
-        (event.offsetY > centerCell
-          ? event.srcElement.offsetHeight + h
-          : event.srcElement.offsetHeight - h)}px`,
-      parentPositionDiff: pl,
+      firstBlockTop: parseInt(positionTop) + rect.top,
+      top: positionTop,
+      display: 'inline-table'
+          
     };
     const lastFlowBoxPosition = this.mainFlow[this.mainFlow.length - 1]
       .followBoxPosition;
@@ -107,7 +120,7 @@ export class FollowUpFlowComponent {
     } else {
       console.log('index', index);
       console.log('!!!!!!!!!!!!!!!!!');
-      console.log('event.screenY ', event.screenY);
+      console.log('event.scrollTop ', event.scrollTop);
       console.log('lastTablePosition', lastTablePosition);
       console.log(
         ' parseInt(lastTablePosition.top, 10)',
@@ -119,15 +132,29 @@ export class FollowUpFlowComponent {
         `${event.pageY - parseInt(lastTablePosition.top, 10)}`,
       );
 
-      const differ = event.screenY - parseInt(lastTablePosition.top, 10);
-      console.log('differ', differ);
+      // const differ = event.screenY - parseInt(lastTablePosition.top, 10);
+      const firstBlockTop = this.mainFlow[0].followBoxPosition.firstBlockTop;
+      const differ = event.pageY - event.clientY;
+
+  
+
+
+      console.log('event.screenY', event);
+      console.log('event.pageY', event.pageY);
+      console.log('event.clientY', event.clientY);
+      console.log('differ', differ)
+      console.log('window',window.pageYOffset || document.documentElement.scrollTop)
       this.mainFlow[index].nextFollowUp = nextCondition;
       this.mainFlow[index].followBoxPosition = {
         position: 'relative',
+        display: 'inline-table',
         //   top: `${parseInt(lastTablePosition.top, 10) -
         //     (event.pageY - parseInt(lastTablePosition.top, 10))}px`,
         // };
-        top: differ > 0 ? `${differ}px` : `${Math.abs(differ)}px`,
+        // top: differ > 0 ? `${differ + parseInt(lastTablePosition.top, 10)}px` : `${Math.abs(differ)}px`,
+        // top: `${differ + parseInt(lastTablePosition.top, 10)-firstBlockTop}px`,
+        top: `${event.pageY - firstBlockTop + differ}px`,
+        
       };
     }
     console.log('this.mainFlow', this.mainFlow);
@@ -163,6 +190,8 @@ export class FollowUpFlowComponent {
         parseInt(lastFlowBoxPosition.top, 10)
       : 0;
 
+      window.scrollBy(700,0)
+
     this.mainFlow = this.mainFlow.concat({
       table,
       nextFollowUp: '',
@@ -173,10 +202,11 @@ export class FollowUpFlowComponent {
               parseInt(lastTablePosition.top, 10)}px`
           : `${parseInt(lastFlowBoxPosition.top, 10)}px`,
         position: 'relative',
+        display: 'inline-table',
       },
     });
 
-    window.scrollY = 700;
+  
     console.log('mainflow', this.mainFlow);
   }
 }
