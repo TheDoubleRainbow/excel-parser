@@ -8,11 +8,15 @@
       <div class="file-inputs">
         <div class="file">
           <span>Transition table</span>
-          <input type="file" multiple="false" (change)="onFileUpload($event, 'vui')" />
+          <input
+            accept = ".xls, .xlsx, .xlsm"
+            type="file" multiple="false" (change)="onFileUpload($event, 'vui')" />
         </div>
         <div class="file">
           <span>Command mapping</span>
-          <input type="file" multiple="false" (change)="onFileUpload($event, 'commands')" />
+          <input
+            accept = ".xls, .xlsx, .xlsm"
+            type="file" multiple="false" (change)="onFileUpload($event, 'commands')" />
         </div>
       </div>
     </div>
@@ -64,10 +68,10 @@
   </div>
 </div>
 
-<app-popup 
-  [isModalActive] = "modalActive" 
-  [isModalHasContent] = "modalHasContent" 
-  [commandColumnIDs] = "commandColumnIDs" 
-  [commandLines] = "findColumn"   
+<app-popup
+  [isModalActive] = "modalActive"
+  [isModalHasContent] = "modalHasContent"
+  [commandColumnIDs] = "commandColumnIDs"
+  [commandLines] = "findColumn"
   (popupClose)="onPopupClose()"
 ></app-popup>
