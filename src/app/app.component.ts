@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import * as xlsx from 'xlsx';
 import { Line } from './types';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +20,7 @@ export class AppComponent {
   commandColumnIDs: Array<string>;
   commandLines: Array<Line>;
   fileType: string;
-  findColumn: Array<Line>; 
+  findColumn: Array<Line>;
   modalActive: boolean;
   modalHasContent: boolean = false;
   isSpoiled = {
@@ -27,7 +28,7 @@ export class AppComponent {
     search: false,
     followUp: false,
     diffChecker: true,
-  } 
+  }
   fileName: string;
   commandFileName: string;
   loadedFromLocalStorage: boolean = false;
@@ -41,6 +42,13 @@ export class AppComponent {
     this.loadedFromLocalStorage = false;
 
     const file = event.target.files[0];
+
+    const data = new FormData();
+    data.append('excel', file);
+    fetch(`${environment.url}file`, {method: 'POST', body: data}).then(res => res.json()).then(res=> {
+      console.log(res);
+    })
+
     const reader = new FileReader();
     reader.onload = (e: any) => {
       this.parseFile(e, file, type);
@@ -179,28 +187,28 @@ export class AppComponent {
         }
         return acc;
       }, []);
-    }   
+    }
 
     //console.log('lines===>', this.lines);
     //console.log('selectedFilterValue===>', this.selectedFilterValue);
   }
 
-  onCommandClick(event) {      
-    if (this.commandLines) {  
+  onCommandClick(event) {
+    if (this.commandLines) {
       this.modalHasContent = true;
 
       this.findColumn = this.commandLines.filter(data => {
-        if (data.columns.B === event) {     
-          
-          data.columns = Object.keys(data.columns).reduce((object, key) => {    
-            
+        if (data.columns.B === event) {
+
+          data.columns = Object.keys(data.columns).reduce((object, key) => {
+
             if (key == 'B' || key == 'D' || key == 'E') {
               object[key] = data.columns[key];
-            }     
+            }
 
-            if (key == 'E' && typeof object['E'] !== 'object') { 
-              object[key] = object[key].split(',').map((item, key) => {               
-                if (item.includes('=')) {  
+            if (key == 'E' && typeof object['E'] !== 'object') {
+              object[key] = object[key].split(',').map((item, key) => {
+                if (item.includes('=')) {
                   return {
                     name: item.split('=')[0],
                     sep: '=',
@@ -212,19 +220,19 @@ export class AppComponent {
                     sep: '',
                     value: ''
                   }
-                }                                     
-              }, {});                 
+                }
+              }, {});
             }
 
             return object
-          }, {});         
-          
-          this.commandColumnIDs = Object.keys(data.columns);  
-          
+          }, {});
+
+          this.commandColumnIDs = Object.keys(data.columns);
+
           return data;
         }
-      });         
-    } 
+      });
+    }
 
     this.modalActive = true;
     localStorage.setItem('selectedFilterValue', JSON.stringify(this.selectedFilterValue));
@@ -287,4 +295,4 @@ export class AppComponent {
   ngOnInit() {
     this.checkSavedData();
   }
-} 
+}
