@@ -1,97 +1,6 @@
-.main {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-div.follow-table {
-  border: none;
-  background-color: none;
-  width: 100%;
-  text-align: center;
-  border-collapse: collapse;
-}
-
-.table.is-striped .result-variant:hover {
-  background-color: lightblue;
-}
-.divTable.follow-table .divTableCell,
-.divTable.follow-table .divTableHead {
-  padding: 5px 10px;
-}
-.divTable.follow-table .divTableBody .divTableCell {
-  font-size: 13px;
-}
-.divTable.follow-table .divTableHeading {
-  background: none;
-  border-bottom: 2px solid #bbb;
-}
-.divTable.follow-table .divTableHeading .divTableHead {
-  font-size: 16px;
-  font-weight: bold;
-  color: #000;
-  text-align: center;
-  padding: 5px 10px;
-}
-.follow-table.outerTableFooter .tableFootStyle {
-  padding: 3px 5px;
-}
-
-.divTable {
-  display: table;
-  width: 710px;
-}
-.divTableRow {
-  display: table-row;
-  border-bottom: 1px solid #bbb;
-}
-.divTableHeading {
-  display: table-header-group;
-}
-.divTableCell,
-.divTableHead {
-  display: table-cell;
-}
-.divTableHeading {
-  display: table-header-group;
-}
-.divTableBody {
-  display: table-row-group;
-}
 
 .cursor {
   cursor: pointer;
-}
-
-.color-green {
-  background: lightgreen;
-  font-weight: bold;
-}
-
-.color-yellow {
-  background: lightyellow;
-  font-weight: bold;
-}
-
-.right-block {
-  display: flex;
-  padding: 0 10px;
-  align-items: center;
-  position: absolute;
-}
-
-.followUpTitle {
-  font-size: 12px;
-  padding-right: 10px;
-  font-weight: bold;
-}
-
-.block {
-  word-break: break-word;
-}
-
-.flex {
-  display: flex;
 }
 
 .breadcrumbs {
@@ -113,4 +22,24 @@ div.follow-table {
 
 .is-follow-up-cell, .is-command-cell {
   cursor: pointer;
+}
+
+.search, .default-columns {
+  margin: 10px 0;
+}
+
+.is-follow-up-cell, .is-complete-cell {
+  font-weight: bold;
+}
+
+.is-follow-up-cell {
+  background-color: lightyellow;
+}
+
+.is-complete-cell {
+  background-color: lightgreen;
+}
+
+.is-error-cell {
+  background-color: crimson;
 }

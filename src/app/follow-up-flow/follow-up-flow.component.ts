@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { Line, LineRenderType } from '../types';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Line } from '../types';
 import { HeadersConfig, DefaultFilters } from './../settings';
 
 @Component({
@@ -7,150 +7,92 @@ import { HeadersConfig, DefaultFilters } from './../settings';
   templateUrl: './follow-up-flow.component.html',
   styleUrls: ['./follow-up-flow.component.scss'],
 })
-export class FollowUpFlowComponent {
+export class FollowUpFlowComponent implements OnInit {
   @Input() lines: Array<Line>;
   @Input() selectedFilterValue: Array<Line>;
-  @Input() followUpFromSearch:any;
+  @Input() followUpFromSearch: any;
 
-  @Input() columnIDs : Array<string>;
-  @Input() fileType : string;
+  @Input() columnIDs: Array<string>;
+  @Input() fileType: string;
 
+  @Output() commandClick: EventEmitter<any> = new EventEmitter();
 
   constructor() {}
 
   defaultFilters = DefaultFilters;
   headers = HeadersConfig;
   filter: any = this.defaultFilters.phone;
-  
-
   selectedValue: string = 'Context Name';
   selectedNextFollowUp: string;
-  mainFlow: Array<Array< Array<LineRenderType>>
-   
-  > = [];
+  mainFlow: Array<Array<Array<Line>>> = [];
 
-
-
+  allContext = 'All contexts';
+  selectedContext: string = this.allContext;
 
   selectFilter(event: any) {
     this.selectedValue = event.target.value;
   }
 
-  selectiterKey(){
+  selectiterKey() {
     if (this.filter.N) {
-      return 'N'
+      return 'O';
     }
-    return 'O'
+    return 'P';
   }
 
+  onFilterChange(e: any) {
+    this.filter = e;
+  }
 
+  addTable(compareValue: string) {
+    return this.lines.reduce((acc, line) => {
+      if (line.columns.B.toLowerCase() === compareValue.toLowerCase()) {
+        acc = acc.concat({
+          ...line,
+        });
+      }
+      return acc;
+    }, []);
+  }
 
-
-  selectCondition(nextFollowUp?: string) {
-    console.log('filter', this.filter);
-    console.log('this.selectiterKey()',this.selectiterKey());
-    console.log('this.selectedValue', this.selectedValue);
-    console.log(this.lines);
-    
-    
-    
+  selectCondition() {
     this.mainFlow = [];
-    const table = this.lines.reduce((acc, line) => {
-      console.log(line.columns[this.selectiterKey()]);
-      
-      if (line.columns.B.toLowerCase() === this.selectedValue.toLowerCase()) {
-        acc = acc.concat({
-          ...line
-        });
-      }
-      return acc;
-    }, []);
+    const table = this.addTable(this.selectedValue);
 
-
-    console.log('table', table);
-    
-
-  
-
-    this.mainFlow = this.mainFlow.concat([table]);
-
-    console.log("this.mainFlow", this.mainFlow);
+    if (table.length) {
+      this.mainFlow = this.mainFlow.concat([table]);
+    }
   }
 
-
-  selectConditionForFollowUp() {
-
-    console.log('this.selectiterKey()',this.selectiterKey());
-    
-    const table = this.lines.reduce((acc, line) => {
-      if (
-        line.columns.B.toLowerCase() === this.selectedNextFollowUp.toLowerCase()
-      ) {
-        acc = acc.concat({
-          ...line
-        });
-      }
-      return acc;
-    }, []);
-
-
-
-   
-    this.mainFlow = this.mainFlow.concat([table]);
-    
-    console.log("this.mainFlow", this.mainFlow);
-    
+  followUp(line: Line) {
+    this.selectedNextFollowUp = line.columns[this.selectiterKey()];
+    const table = this.addTable(this.selectedNextFollowUp);
+    if (table.length) {
+      this.mainFlow = this.mainFlow.concat([table]);
     }
+  }
 
-    followUp(line, index){
-      console.log('line', line, index);
-      console.log('index', index);
-
-      this.selectedNextFollowUp = line.columns[this.selectiterKey()];
-      this.selectConditionForFollowUp()
-    }
-
-
-    objectKeys(obj): Array<any> {
-      let keys = Object.keys(obj).sort();
-  
-      return keys
-    }
-
-  
+  objectKeys(obj): Array<any> {
+    let keys = Object.keys(obj).sort();
+    return keys;
+  }
 
   ngOnChanges(change: any) {
-    console.error('this.fileType', this.fileType)
-    console.error('this.defaultFilters',this.defaultFilters)
-    this.filter = this.fileType === 'audio' ? this.defaultFilters.audio : this.defaultFilters.phone;
-
-    if(change.followUpFromSearch.currentValue) {
-      this.selectFilter({target: {value: this.followUpFromSearch.followContext}});
+    if (change.followUpFromSearch.currentValue) {
+      this.selectFilter({
+        target: { value: this.followUpFromSearch.followContext },
+      });
       this.selectCondition();
     }
-
-
   }
 
-  onClickBreadcrumbs(index: number){
+  onClickBreadcrumbs(index: number) {
     this.mainFlow = this.mainFlow.slice(0, index + 1);
-    console.log(' this.mainFlow', this.mainFlow)
   }
 
-
-
-  defaultFilter(type: string) {
-    if(type === 'audio') {
-      this.filter = this.defaultFilters.audio;
-    }
-    else if(type === 'phone'){
-      this.filter = this.defaultFilters.phone;
-    }
+  onCommandClick(value: string) {
+    this.commandClick.emit(value);
   }
 
-  changeFilter(id) {
-    this.filter[id] = !this.filter[id];
-  }
-
-
+  ngOnInit(): void {}
 }

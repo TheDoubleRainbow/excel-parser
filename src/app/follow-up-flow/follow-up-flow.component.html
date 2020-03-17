@@ -1,15 +1,7 @@
-<div class="filter">
-    <h2 class="subtitle">Select columns to display: </h2>
-    <div class="criterias">
-        <span *ngFor="let item of columnIDs" class="tag filter-criteria"  (click) = "changeFilter(item)" [class] = "filter[item] ? 'is-primary' : 'is-light'">
-            {{headers[fileType][item]}}
-        </span>
-    </div>
-    <div class="default-columns">
-        <span>Display default for </span> <span class="tag is-primary" (click) = "defaultFilter('phone')">Phone</span>
-         or <span class="tag is-primary" (click) = "defaultFilter('audio')">Audio</span>
-    </div>
-</div>
+<app-table-filter
+        [lines] = "lines" [columnIDs] = "columnIDs" [fileType] = "fileType"
+        (filterChange) = "onFilterChange($event)">
+    </app-table-filter>
 
 
 <div *ngIf="lines">
@@ -46,13 +38,13 @@
                 <tr *ngIf="selectedContext === allContext || line.columns['B'] === selectedContext" class="result-variant">
                     <td>{{line.row}}</td>
                     <ng-container *ngFor="let key of objectKeys(line.columns)">
-                        <td *ngIf="filter[key] && line.columns[key] === 'Follow-Up'" (click) = "followUp(line, index)" class="is-follow-up-cell">
+                        <td *ngIf="filter[key] && line.columns[key].toLowerCase() === 'follow-up'" (click) = "followUp(line)" class="is-follow-up-cell">
                             {{line.columns[key]}}
                         </td>
-                        <td *ngIf="filter[key] && line.columns[key] != 'Follow-Up' && key === 'G'" class="is-command-cell" (click) = "onCommandClick(line.columns[key])">
+                        <td *ngIf="filter[key] && line.columns[key].toLowerCase() != 'follow-up' && key === 'G'" class="is-command-cell" (click) = "onCommandClick(line.columns[key])">
                             {{line.columns[key]}} <i class="fa fa-question-circle"></i>
                         </td>
-                        <td *ngIf="filter[key] && line.columns[key] != 'Follow-Up' && key != 'G'">
+                        <td *ngIf="filter[key] && line.columns[key].toLowerCase() != 'follow-up' && key != 'G'">
                             {{line.columns[key]}}
                         </td>
                     </ng-container>
@@ -61,72 +53,3 @@
         </tbody>
     </table>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="flex">
-    <div  *ngFor="let table of mainFlow; index as index" >
-        <div *ngIf="index === mainFlow.length-1" [ngStyle]="table.tablePosition">
-        <div class="flex">
-
-                <div class="table is-striped is-fullwidth" id="myDiv">
-                    <div *ngIf="table" class="divTableHeading">
-                        <div class="divTableHead">Context Name</div>
-                        <div class="divTableHead">Command Id</div>
-                        <div class="divTableHead">Final prompt Id</div>
-                        <div class="divTableHead">Follow up context</div>
-                        <div class="divTableHead">Action class</div>
-                    </div>
-
-                    <div *ngFor="let line of table.table" class="divTableBody">
-                        <div class="divTableRow">
-                            <div class="divTableCell">{{ line.B }}</div>
-                            <div class="divTableCell">{{ line.G }}</div>
-                            <div class="divTableCell">
-                                {{ line.L }}
-                            </div>
-                            <div class="divTableCell">{{ line.P }}</div>
-
-                            <div
-                                (click)="
-                                    onClickFollowUp(
-                                        $event,
-                                        line.O,
-                                        index,
-                                        line.P
-                                    )
-                                "
-                                class="divTableCell"
-                                [ngClass]="{
-                                    cursor: line.O === 'Follow-Up',
-                                    'color-yellow': line.O === 'Follow-Up',
-                                    'color-green': line.O === 'Task Complete'
-                                }"
-                            >
-                                {{ line.O }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            
-            </div>
-        </div>
-        
-    </div>
-</div>
-

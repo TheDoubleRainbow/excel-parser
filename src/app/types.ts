@@ -3,10 +3,3 @@ export type Line = {
   columns?: any;
 };
 
-export type LineRenderType = {
-  B: string;
-  G: string;
-  L: string;
-  O: string;
-  P: string;
-};
