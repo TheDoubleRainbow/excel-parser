@@ -3,6 +3,7 @@
     "tabWidth": 2,
     "semi": true,
     "singleQuote": true,
+    "editor.formatOnSave": true,
     "overrides": [
         {
             "files": "*.test.js",
@@ -11,7 +12,10 @@
             }
         },
         {
-            "files": ["*.html", "legacy/**/*.js"],
+            "files": [
+                "*.html",
+                "legacy/**/*.js"
+            ],
             "options": {
                 "tabWidth": 4
             }

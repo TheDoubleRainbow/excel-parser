@@ -1,3 +1,9 @@
+<app-table-filter
+        [lines] = "lines" [columnIDs] = "columnIDs" [fileType] = "fileType"
+        (filterChange) = "onFilterChange($event)">
+    </app-table-filter>
+
+
 <div *ngIf="lines">
     <br />
     <h2 class="subtitle">Select top condition</h2>
@@ -11,65 +17,39 @@
     <button class="button is-primary" (click)="selectCondition()">Find condition</button>
 </div>
 
-<div class="main">
-    <div *ngFor="let table of mainFlow; index as index">
-        <div class="main">
-            <div class="main">
-                <div class="divTable follow-table">
-                    <div *ngIf="table" class="divTableHeading">
-                        <div class="divTableHead">Context Name</div>
-                        <div class="divTableHead">Command Id</div>
-                        <div class="divTableHead">Final prompt Id</div>
-                        <div class="divTableHead">Follow up context</div>
-                        <div class="divTableHead">Action class</div>
-                    </div>
-
-                    <div *ngFor="let line of table.table" class="divTableBody">
-                        <div class="divTableRow">
-                            <div class="divTableCell">{{ line.B }}</div>
-                            <div class="divTableCell">{{ line.G }}</div>
-                            <div class="divTableCell">
-                                {{ line.L }}
-                            </div>
-                            <div class="divTableCell">{{ line.P }}</div>
-
-                            <div
-                                (click)="
-                                    onClickFollowUp(
-                                        $event,
-                                        line.O,
-                                        index,
-                                        line.P
-                                    )
-                                "
-                                class="divTableCell"
-                                [ngClass]="{
-                                    cursor: line.O === 'Follow-Up',
-                                    'color-yellow': line.O === 'Follow-Up',
-                                    'color-green': line.O === 'Task Complete'
-                                }"
-                            >
-                                {{ line.O }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div [ngStyle]="followUpBoxStyle">
-                <div class="main">
-                    <h6 class="padding-right-10">{{ table.nextFollowUp }}</h6>
-
-                    <button
-                        [ngClass]="{
-                            disabled: !table.nextFollowUp
-                        }"
-                        class="button is-warning"
-                        (click)="selectConditionForFollowUp()"
-                    >
-                        Find condition
-                    </button>
-                </div>
-            </div>
-        </div>
+<div class="breadcrumbs" >
+    <div  *ngFor="let table of mainFlow; index as index">
+        <div class="cursor" (click)="onClickBreadcrumbs(index)">{{table[0].columns.B}}/</div>
     </div>
+</div>
+
+
+
+<div class="result" *ngFor="let table of mainFlow; index as index">
+    <table *ngIf="index === mainFlow.length-1" class="table is-striped is-fullwidth">
+        <thead>
+            <th>line ID</th>
+            <ng-container *ngFor="let item of columnIDs">
+                <th *ngIf="filter[item]">{{headers[fileType][item]}}</th>
+            </ng-container>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let line of table">
+                <tr *ngIf="selectedContext === allContext || line.columns['B'] === selectedContext" class="result-variant">
+                    <td>{{line.row}}</td>
+                    <ng-container *ngFor="let key of objectKeys(line.columns)">
+                        <td *ngIf="filter[key] && line.columns[key].toLowerCase() === 'follow-up'" (click) = "followUp(line)" class="is-follow-up-cell">
+                            {{line.columns[key]}}
+                        </td>
+                        <td *ngIf="filter[key] && line.columns[key].toLowerCase() != 'follow-up' && key === 'G'" class="is-command-cell" (click) = "onCommandClick(line.columns[key])">
+                            {{line.columns[key]}} <i class="fa fa-question-circle"></i>
+                        </td>
+                        <td *ngIf="filter[key] && line.columns[key].toLowerCase() != 'follow-up' && key != 'G'">
+                            {{line.columns[key]}}
+                        </td>
+                    </ng-container>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
 </div>

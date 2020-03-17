@@ -43,9 +43,12 @@
       <span class="spoiler-switch">{{isSpoiled.followUp ? '+' : '-'}}</span> Follow-Up
     </div>
     <app-follow-up-flow
+        [fileType] = "fileType"
         [lines]="lines"
         [selectedFilterValue]="selectedFilterValue"
         [followUpFromSearch]="followUpFromSearch"
+        [columnIDs] = "columnIDs" 
+        
     ></app-follow-up-flow>
   </div>
 </div>

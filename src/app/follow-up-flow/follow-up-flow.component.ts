@@ -1,115 +1,98 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-  TemplateRef,
-  ViewChild,
-  ViewContainerRef,
-} from '@angular/core';
-import { Line, LineRenderType } from '../types';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Line } from '../types';
+import { HeadersConfig, DefaultFilters } from './../settings';
 
 @Component({
   selector: 'app-follow-up-flow',
   templateUrl: './follow-up-flow.component.html',
   styleUrls: ['./follow-up-flow.component.scss'],
 })
-export class FollowUpFlowComponent {
+export class FollowUpFlowComponent implements OnInit {
   @Input() lines: Array<Line>;
   @Input() selectedFilterValue: Array<Line>;
-  @Input() followUpFromSearch:any;
+  @Input() followUpFromSearch: any;
+
+  @Input() columnIDs: Array<string>;
+  @Input() fileType: string;
+
+  @Output() commandClick: EventEmitter<any> = new EventEmitter();
 
   constructor() {}
 
+  defaultFilters = DefaultFilters;
+  headers = HeadersConfig;
+  filter: any = this.defaultFilters.phone;
   selectedValue: string = 'Context Name';
   selectedNextFollowUp: string;
-  mainFlow: Array<{ table: Array<LineRenderType>; nextFollowUp: string }> = [];
+  mainFlow: Array<Array<Array<Line>>> = [];
 
-  followUpBoxStyle: {
-    top: string;
-    left: string;
-    position?: string;
-  } = {
-    top: '0px',
-    left: '0px',
-    position: 'absolute',
-  };
+  allContext = 'All contexts';
+  selectedContext: string = this.allContext;
 
   selectFilter(event: any) {
     this.selectedValue = event.target.value;
   }
 
-  selectCondition(nextFollowUp?: string) {
+  selectiterKey() {
+    if (this.filter.N) {
+      return 'O';
+    }
+    return 'P';
+  }
+
+  onFilterChange(e: any) {
+    this.filter = e;
+  }
+
+  addTable(compareValue: string) {
+    return this.lines.reduce((acc, line) => {
+      if (line.columns.B.toLowerCase() === compareValue.toLowerCase()) {
+        acc = acc.concat({
+          ...line,
+        });
+      }
+      return acc;
+    }, []);
+  }
+
+  selectCondition() {
     this.mainFlow = [];
-    const table = this.lines.reduce((acc, line) => {
-      if (line.columns.B.toLowerCase() === this.selectedValue.toLowerCase()) {
-        acc = acc.concat({
-          B: line.columns.B,
-          G: line.columns.G,
-          L: line.columns.L,
-          O: line.columns.O,
-          P: line.columns.P,
-        });
-      }
-      return acc;
-    }, []);
+    const table = this.addTable(this.selectedValue);
 
-    this.mainFlow = this.mainFlow.concat({
-      table,
-      nextFollowUp: nextFollowUp || '',
-    });
-  }
-
-  onClickFollowUp(
-    event: any,
-    name: string,
-    index: number,
-    nextCondition: string,
-  ) {
-    console.log('event', event);
-
-    // this.followUpBoxStyle = {
-    //   ...this.followUpBoxStyle,
-    //   top: `${event.clientY - event.offsetY}px`,
-    //   left: `${event.clientX + event.offsetX}px`,
-    // };
-
-    this.selectedNextFollowUp = nextCondition;
-
-    if (index !== this.mainFlow.length - 1) {
-      this.mainFlow = this.mainFlow.slice(0, index + 1);
-    }
-    if (name === 'Follow-Up') {
-      this.mainFlow[index].nextFollowUp = nextCondition;
+    if (table.length) {
+      this.mainFlow = this.mainFlow.concat([table]);
     }
   }
 
-  selectConditionForFollowUp() {
-    console.log('mainflow', this.mainFlow);
-    const table = this.lines.reduce((acc, line) => {
-      if (
-        line.columns.B.toLowerCase() === this.selectedNextFollowUp.toLowerCase()
-      ) {
-        acc = acc.concat({
-          B: line.columns.B,
-          G: line.columns.G,
-          L: line.columns.L,
-          O: line.columns.O,
-          P: line.columns.P,
-        });
-      }
-      return acc;
-    }, []);
+  followUp(line: Line) {
+    this.selectedNextFollowUp = line.columns[this.selectiterKey()];
+    const table = this.addTable(this.selectedNextFollowUp);
+    if (table.length) {
+      this.mainFlow = this.mainFlow.concat([table]);
+    }
+  }
 
-    this.mainFlow = this.mainFlow.concat({ table, nextFollowUp: '' });
-    console.log('mainflow', this.mainFlow);
+  objectKeys(obj): Array<any> {
+    let keys = Object.keys(obj).sort();
+    return keys;
   }
 
   ngOnChanges(change: any) {
-    if(change.followUpFromSearch.currentValue) {
-      this.selectFilter({target: {value: this.followUpFromSearch.followContext}});
+    if (change.followUpFromSearch.currentValue) {
+      this.selectFilter({
+        target: { value: this.followUpFromSearch.followContext },
+      });
       this.selectCondition();
     }
   }
+
+  onClickBreadcrumbs(index: number) {
+    this.mainFlow = this.mainFlow.slice(0, index + 1);
+  }
+
+  onCommandClick(value: string) {
+    this.commandClick.emit(value);
+  }
+
+  ngOnInit(): void {}
 }

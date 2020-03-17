@@ -35,6 +35,8 @@ export class SearchComponent implements OnInit {
       this.result = this.search(query);
       this.buildContextsList();
     }
+    console.log('this.result',this.result)
+  
   }
 
   search(query): Array<Line> {
