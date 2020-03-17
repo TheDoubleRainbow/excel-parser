@@ -1,3 +1,17 @@
+<div class="filter">
+    <h2 class="subtitle">Select columns to display: </h2>
+    <div class="criterias">
+        <span *ngFor="let item of columnIDs" class="tag filter-criteria"  (click) = "changeFilter(item)" [class] = "filter[item] ? 'is-primary' : 'is-light'">
+            {{headers[fileType][item]}}
+        </span>
+    </div>
+    <div class="default-columns">
+        <span>Display default for </span> <span class="tag is-primary" (click) = "defaultFilter('phone')">Phone</span>
+         or <span class="tag is-primary" (click) = "defaultFilter('audio')">Audio</span>
+    </div>
+</div>
+
+
 <div *ngIf="lines">
     <br />
     <h2 class="subtitle">Select top condition</h2>
@@ -11,12 +25,66 @@
     <button class="button is-primary" (click)="selectCondition()">Find condition</button>
 </div>
 
-<div class="flex">
+<div class="breadcrumbs" >
     <div  *ngFor="let table of mainFlow; index as index">
-        <div [ngStyle]="table.tablePosition">
+        <div class="cursor" (click)="onClickBreadcrumbs(index)">{{table[0].columns.B}}/</div>
+    </div>
+</div>
+
+
+
+<div class="result" *ngFor="let table of mainFlow; index as index">
+    <table *ngIf="index === mainFlow.length-1" class="table is-striped is-fullwidth">
+        <thead>
+            <th>line ID</th>
+            <ng-container *ngFor="let item of columnIDs">
+                <th *ngIf="filter[item]">{{headers[fileType][item]}}</th>
+            </ng-container>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let line of table">
+                <tr *ngIf="selectedContext === allContext || line.columns['B'] === selectedContext" class="result-variant">
+                    <td>{{line.row}}</td>
+                    <ng-container *ngFor="let key of objectKeys(line.columns)">
+                        <td *ngIf="filter[key] && line.columns[key] === 'Follow-Up'" (click) = "followUp(line, index)" class="is-follow-up-cell">
+                            {{line.columns[key]}}
+                        </td>
+                        <td *ngIf="filter[key] && line.columns[key] != 'Follow-Up' && key === 'G'" class="is-command-cell" (click) = "onCommandClick(line.columns[key])">
+                            {{line.columns[key]}} <i class="fa fa-question-circle"></i>
+                        </td>
+                        <td *ngIf="filter[key] && line.columns[key] != 'Follow-Up' && key != 'G'">
+                            {{line.columns[key]}}
+                        </td>
+                    </ng-container>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex">
+    <div  *ngFor="let table of mainFlow; index as index" >
+        <div *ngIf="index === mainFlow.length-1" [ngStyle]="table.tablePosition">
         <div class="flex">
 
-                <div class="divTable redTable" id="myDiv">
+                <div class="table is-striped is-fullwidth" id="myDiv">
                     <div *ngIf="table" class="divTableHeading">
                         <div class="divTableHead">Context Name</div>
                         <div class="divTableHead">Command Id</div>
@@ -34,7 +102,7 @@
                             </div>
                             <div class="divTableCell">{{ line.P }}</div>
 
-                            <div (mousemove)="coordinates($event)"
+                            <div
                                 (click)="
                                     onClickFollowUp(
                                         $event,
@@ -55,29 +123,6 @@
                         </div>
                     </div>
                 </div>
-
-
-                <div
-                [ngStyle]="
-                    !table.followBoxPosition
-                        ? { display: 'none' }
-                        : table.followBoxPosition
-                "
-            >
-                <div class="main block">
-                  <div>&#8596;</div>
-                    <b class="followUpTitle">{{ table.nextFollowUp }}</b>
-                    <button
-                        [ngClass]="{
-                            disabled: !table.nextFollowUp
-                        }"
-                        class="button is-warning"
-                        (click)="selectConditionForFollowUp()"
-                    >
-                        Find condition
-                    </button>
-                </div>
-        </div>
             
             </div>
         </div>

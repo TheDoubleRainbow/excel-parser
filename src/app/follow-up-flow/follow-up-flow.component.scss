@@ -11,6 +11,10 @@ div.follow-table {
   text-align: center;
   border-collapse: collapse;
 }
+
+.table.is-striped .result-variant:hover {
+  background-color: lightblue;
+}
 .divTable.follow-table .divTableCell,
 .divTable.follow-table .divTableHead {
   padding: 5px 10px;
@@ -88,4 +92,25 @@ div.follow-table {
 
 .flex {
   display: flex;
+}
+
+.breadcrumbs {
+  padding: 20px 0;
+}
+
+.search, .default-columns {
+  margin: 10px 0;
+}
+
+.criterias {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  padding-top: 20px;
+}
+
+.is-follow-up-cell, .is-command-cell {
+  cursor: pointer;
 }
