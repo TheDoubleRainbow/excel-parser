@@ -1,0 +1,12 @@
+<div class="filter">
+  <h2 class="subtitle">Select columns to display: </h2>
+  <div class="criterias">
+      <span *ngFor="let item of columnIDs" class="tag filter-criteria"  (click) = "changeFilter(item)" [class] = "filter[item] ? 'is-primary' : 'is-light'">
+          {{headers[fileType][item]}}
+      </span>
+  </div>
+  <div class="default-columns">
+      <span>Display default for </span> <span class="tag is-primary" (click) = "defaultFilter('phone')">Phone</span>
+       or <span class="tag is-primary" (click) = "defaultFilter('audio')">Audio</span>
+  </div>
+</div>
