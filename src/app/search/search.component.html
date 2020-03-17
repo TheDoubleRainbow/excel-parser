@@ -1,9 +1,10 @@
 <div *ngIf="lines" class="search-box">
     <app-table-filter
-      [lines] = "lines" [columnIDs] = "columnIDs" [fileType] = "fileType"
-      (filterChange) = "onFilterChange($event)">
+        [lines] = "lines" [columnIDs] = "columnIDs" [fileType] = "fileType"
+        (filterChange) = "onFilterChange($event)">
     </app-table-filter>
-    <div class="select">
+    
+    <div class="select">  
         <select (change) = "filterByContext($event)">
             <option *ngFor="let context of contextList">{{context}}</option>
         </select>
