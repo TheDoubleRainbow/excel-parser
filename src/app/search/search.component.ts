@@ -8,7 +8,7 @@ import { HeadersConfig, DefaultFilters } from './../settings';
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit {
-  
+
 
   constructor() { }
 
@@ -19,12 +19,9 @@ export class SearchComponent implements OnInit {
   @Output() commandClick: EventEmitter<any> = new EventEmitter();
   @Output() followUpClick: EventEmitter<any> = new EventEmitter();
 
-
-
-  displayableIDs = {};
-  defaultFilters = DefaultFilters;
   headers = HeadersConfig;
-  filter: any = this.defaultFilters.phone;
+  filter: any = DefaultFilters.phone;
+
   result: Array<Line>;
   lastQuery: string;
   allContext = 'All contexts';
@@ -65,18 +62,9 @@ export class SearchComponent implements OnInit {
     return keys
   }
 
-  defaultFilter(type: string) {
-    if(type === 'audio') {
-      this.filter = this.defaultFilters.audio;
-    }
-    else if(type === 'phone'){
-      this.filter = this.defaultFilters.phone;
-    }
-    console.log(this.filter);
-  }
-
-  changeFilter(id) {
-    this.filter[id] = !this.filter[id];
+  onFilterChange(e: any) {
+    this.filter = e;
+    console.log(e);
   }
 
   followUp(line) {
@@ -99,10 +87,6 @@ export class SearchComponent implements OnInit {
       }
     });
     this.contextList = [this.allContext ,...Object.keys(contextMap)];
-  }
-
-  ngOnChanges() {    
-    this.filter = this.fileType === 'audio' ? this.defaultFilters.audio : this.defaultFilters.phone;
   }
 
   ngOnInit(): void {

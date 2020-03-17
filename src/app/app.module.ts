@@ -9,6 +9,7 @@ import { SearchComponent } from './search/search.component';
 import { SheetComponent } from './sheet/sheet.component';
 import { PopupComponent } from './popup/popup.component';
 import { DiffCheckerComponent } from './diff-checker/diff-checker.component';
+import { TableFilterComponent } from './table-filter/table-filter.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { DiffCheckerComponent } from './diff-checker/diff-checker.component';
     SearchComponent,
     SheetComponent,
     PopupComponent,
-    DiffCheckerComponent
+    DiffCheckerComponent,
+    TableFilterComponent
   ],
   imports: [
     BrowserModule,
