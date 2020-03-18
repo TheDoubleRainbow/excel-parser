@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import * as xlsx from 'xlsx';
-import { Line } from './types';
+import { Line, ParsedDiff } from './types';
 
 @Component({
   selector: 'app-root',
@@ -33,22 +33,9 @@ export class AppComponent {
   loadedFromLocalStorage: boolean = false;
   followUpFromSearch: any;
 
-  filesData = {
-    transition: {
+  diffData: ParsedDiff;
 
-    },
-    mapping: {
-
-    },
-    firstDiff: {
-
-    },
-    secondDiff: {
-
-    }
-  }
-
-  onFileUpload(event: any, type: string) {
+  onFileUpload(event: any, type: string, diffNum?: number) {
     if (event.target.files.length !== 1) {
       return;
     }
@@ -58,7 +45,7 @@ export class AppComponent {
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.onload = (e: any) => {
-      this.parseFile(e, file, type);
+      this.parseFile(e, file, type, diffNum);
     };
     reader.readAsBinaryString(file);
   }
@@ -68,7 +55,7 @@ export class AppComponent {
     this.parseSheetLines(this.sheets, this.selectedName, this.lines, this.columnIDs, 'vui')
   }
 
-  parseFile(e: any, file: File, type:string) {
+  parseFile(e: any, file: File, type:string, diffNum?: number) {
     const binary = e.target.result;
     const wb: xlsx.WorkBook = xlsx.read(binary, { type: 'binary' });
     console.log(wb);
@@ -92,6 +79,10 @@ export class AppComponent {
         this.commandColumnIDs,
         'commands',
       );
+    }
+
+    else if(type === 'diff') {
+      let diff = diffNum === 0 ? this.diffData.firstDiff : this.diffData.secondDiff;
     }
   }
 

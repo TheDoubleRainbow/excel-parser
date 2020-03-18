@@ -1,0 +1,16 @@
+.file-pickers {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  padding: 20px 0;
+}
+
+.sheet-selector {
+  padding-top: 20px;
+  width: 100%;
+  text-align: center;
+
+  .label {
+    text-align: center;
+  }
+}
