@@ -33,6 +33,21 @@ export class AppComponent {
   loadedFromLocalStorage: boolean = false;
   followUpFromSearch: any;
 
+  filesData = {
+    transition: {
+
+    },
+    mapping: {
+
+    },
+    firstDiff: {
+
+    },
+    secondDiff: {
+
+    }
+  }
+
   onFileUpload(event: any, type: string) {
     if (event.target.files.length !== 1) {
       return;

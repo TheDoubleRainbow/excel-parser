@@ -47,8 +47,8 @@
         [lines]="lines"
         [selectedFilterValue]="selectedFilterValue"
         [followUpFromSearch]="followUpFromSearch"
-        [columnIDs] = "columnIDs" 
-        
+        [columnIDs] = "columnIDs"
+        (commandClick)="onCommandClick($event)"
     ></app-follow-up-flow>
   </div>
 </div>
