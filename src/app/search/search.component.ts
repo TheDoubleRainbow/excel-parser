@@ -35,8 +35,7 @@ export class SearchComponent implements OnInit {
       this.result = this.search(query);
       this.buildContextsList();
     }
-    console.log('this.result',this.result)
-  
+
   }
 
   search(query): Array<Line> {
@@ -64,7 +63,6 @@ export class SearchComponent implements OnInit {
 
   onFilterChange(e: any) {
     this.filter = e;
-    console.log(e);
   }
 
   followUp(line) {

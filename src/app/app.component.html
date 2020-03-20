@@ -67,7 +67,12 @@
     <div class="spoiler" (click) = "spoil('diffChecker')">
       <span class="spoiler-switch">{{isSpoiled.diffChecker ? '+' : '-'}}</span> Diff Checker
     </div>
-    <app-diff-checker></app-diff-checker>
+    <app-diff-checker
+    (fileLoad) = "onDiffFileLoad($event)"
+    (sheetSelect) = "onDiffSheetSelect($event)"
+    [diffData] = "diffData"
+    >
+    </app-diff-checker>
   </div>
 </div>
 

@@ -3,15 +3,17 @@ export type Line = {
   columns?: any;
 };
 
-export type ParsedFile = {
-  lines: Array<Line>,
-  columnIDs: Array<string>,
-  sheets: any,
-  fileType?: string,
+export class ParsedFile  {
+  lines: Array<Line>;
+  columnIDs: Array<string>;
+  sheetNames: Array<string>;
+  sheets: any;
+  fileType: string;
 }
 
-export type ParsedDiff = {
-  firstDiff: ParsedFile,
-  secondDiff: ParsedFile,
+export class ParsedDiff {
+  firstDiff = new ParsedFile();
+  secondDiff = new ParsedFile();
+  selectedSheet: string;
 }
 
