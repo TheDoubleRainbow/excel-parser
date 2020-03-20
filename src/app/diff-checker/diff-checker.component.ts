@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { ParsedDiff } from '../types';
+import { ParsedDiff, Line } from '../types';
 
 @Component({
   selector: 'app-diff-checker',
@@ -14,6 +14,7 @@ export class DiffCheckerComponent implements OnInit {
   @Input() diffData: ParsedDiff;
 
   sameSheetNames: Array<string>;
+  differences: Array<any> = [];
 
   constructor() { }
 
@@ -41,6 +42,24 @@ export class DiffCheckerComponent implements OnInit {
 
   checkDifference() {
     console.log('Check Difference');
+    const first = this.diffData.firstDiff.lines;
+    const second = this.diffData.secondDiff.lines;
+    const main = first.length > second.length ? first : second;
+    const alt = first.length > second.length ? second : first;
+
+    for(let i = 0; i < main.length; i++) {
+      if(main[i]) {
+        const altChecked = alt[i] || {row: [i], columns: {}};
+        const mainValues = Object.values(main[i].columns);
+        const altValues = Object.values(alt[i].columns);
+
+        if(mainValues.toString() != altValues.toString()) {
+          this.differences.push([main[i], alt[i]]);
+        }
+        console.log(this.differences);
+      }
+    }
+
   }
 
   ngOnChanges(changes: any): void {
