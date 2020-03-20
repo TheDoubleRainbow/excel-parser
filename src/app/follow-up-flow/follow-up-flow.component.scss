@@ -5,6 +5,11 @@
 
 .breadcrumbs {
   padding: 20px 0;
+  display: flex;
+}
+
+.breadcrumb {
+  margin: 0 10px;
 }
 
 .search, .default-columns {

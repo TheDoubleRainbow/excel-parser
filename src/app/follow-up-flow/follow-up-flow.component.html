@@ -18,7 +18,7 @@
 </div>
 
 <div class="breadcrumbs" >
-    <div  *ngFor="let table of mainFlow; index as index">
+    <div class="breadcrumb tag"  *ngFor="let table of mainFlow; index as index">
         <div class="cursor" (click)="onClickBreadcrumbs(index)">{{table[0].columns.B}}/</div>
     </div>
 </div>
