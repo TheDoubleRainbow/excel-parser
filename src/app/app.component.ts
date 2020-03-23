@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import * as xlsx from 'xlsx';
-import { Line } from './types';
+import { Line, ParsedDiff, ParsedFile } from './types';
 
 @Component({
   selector: 'app-root',
@@ -33,34 +33,29 @@ export class AppComponent {
   loadedFromLocalStorage: boolean = false;
   followUpFromSearch: any;
 
-  filesData = {
-    transition: {
+  diffData = new ParsedDiff();
 
-    },
-    mapping: {
+  reader = new FileReader();
 
-    },
-    firstDiff: {
-
-    },
-    secondDiff: {
-
-    }
-  }
-
-  onFileUpload(event: any, type: string) {
+  onFileUpload(event: any, type: string, diffNum?: number) {
     if (event.target.files.length !== 1) {
       return;
     }
 
-    this.loadedFromLocalStorage = false;
+    if (!diffNum) {
+      this.loadedFromLocalStorage = false;
+    }
 
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.onload = (e: any) => {
-      this.parseFile(e, file, type);
+      this.parseFile(e, file, type, diffNum);
     };
     reader.readAsBinaryString(file);
+  }
+
+  onDiffFileLoad(event: any) {
+    this.onFileUpload(event, 'diff', event.diffType);
   }
 
   selectSheet(event: any) {
@@ -68,10 +63,29 @@ export class AppComponent {
     this.parseSheetLines(this.sheets, this.selectedName, this.lines, this.columnIDs, 'vui')
   }
 
-  parseFile(e: any, file: File, type:string) {
+  onDiffSheetSelect(event: any) {
+    this.diffData.selectedSheet = event;
+    this.parseSheetLines(
+      this.diffData.firstDiff.sheets,
+      this.diffData.selectedSheet,
+      this.diffData.firstDiff.lines,
+      this.diffData.firstDiff.columnIDs,
+      'diff',
+      'firstDiff',
+    );
+    this.parseSheetLines(
+      this.diffData.secondDiff.sheets,
+      this.diffData.selectedSheet,
+      this.diffData.secondDiff.lines,
+      this.diffData.secondDiff.columnIDs,
+      'diff',
+      'secondDiff',
+    );
+  }
+
+  parseFile(e: any, file: File, type: string, diffType?: number) {
     const binary = e.target.result;
     const wb: xlsx.WorkBook = xlsx.read(binary, { type: 'binary' });
-    console.log(wb);
     if (type === 'vui') {
       this.fileName = file.name;
       this.lines = undefined;
@@ -80,8 +94,8 @@ export class AppComponent {
       this.fileType = file.name.includes('Audio')
         ? 'audio'
         : file.name.includes('Phone')
-        ? 'phone'
-        : 'Unknown';
+          ? 'phone'
+          : 'Unknown';
     } else if (type === 'commands') {
       this.commandFileName = file.name;
       this.commandSheets = wb.Sheets;
@@ -93,13 +107,21 @@ export class AppComponent {
         'commands',
       );
     }
+
+    else if (type === 'diff') {
+      let diff: ParsedFile = this.diffData[diffType];
+      diff.sheets = wb.Sheets;
+      diff.sheetNames = wb.SheetNames;
+      diff.lines = undefined;
+      this.diffData = { ...this.diffData };
+    }
   }
 
   isIndex(index: string) {
     return RegExp(/[A-Z]/).test(index[0]);
   }
 
-  parseSheetLines(sheets, selectedName, lines, columnIDs, type) {
+  parseSheetLines(sheets, selectedName, lines, columnIDs, type, diffType?) {
     let keys = Object.keys(sheets[selectedName]);
     lines = [];
     let columnIDsMap = {};
@@ -141,7 +163,7 @@ export class AppComponent {
 
       for (let j = 0; j < columnIDs.length; j++) {
         let id = columnIDs[j];
-        if (!line.columns[id]) {
+        if (line && !line.columns[id]) {
           if (
             lines[i - 1] &&
             lines[i - 1].columns[id] &&
@@ -167,7 +189,12 @@ export class AppComponent {
         columnIDs: this.columnIDs,
       };
       localStorage.setItem('vuiLines', JSON.stringify(vuiSaved));
-    } else {
+    } else if (type === 'diff') {
+      this.diffData[diffType].lines = lines;
+      this.diffData[diffType].columnIDs = lines;
+      this.diffData = { ...this.diffData };
+    }
+    else {
       this.commandSheets = sheets;
       this.commandLines = lines;
       this.commandColumnIDs = columnIDs;
@@ -185,7 +212,7 @@ export class AppComponent {
     }
     localStorage.setItem('common', JSON.stringify(savedCommon));
 
-    if(type === 'vui') {
+    if (type === 'vui') {
       this.isSpoiled.file = true;
 
       this.selectedFilterValue = this.lines.reduce((acc, item) => {
@@ -244,7 +271,7 @@ export class AppComponent {
     localStorage.setItem('selectedFilterValue', JSON.stringify(this.selectedFilterValue));
   }
 
-  spoil(name: string){
+  spoil(name: string) {
     this.isSpoiled[name] = !this.isSpoiled[name];
   }
 
@@ -257,7 +284,7 @@ export class AppComponent {
     const savedCommand = localStorage.getItem('commandLines');
     const savedCommon = localStorage.getItem('common');
     const selectedFilterValue = localStorage.getItem('selectedFilterValue');
-    if(!savedCommon || !selectedFilterValue) {
+    if (!savedCommon || !selectedFilterValue) {
       return
     }
 
@@ -266,16 +293,16 @@ export class AppComponent {
     const commonParsed = JSON.parse(savedCommon);
     this.selectedFilterValue = JSON.parse(selectedFilterValue);
 
-    if(savedVui) {
+    if (savedVui) {
       const vuiParsed = JSON.parse(savedVui);
-      vuiParsed.lines.splice(0,1);
+      vuiParsed.lines.splice(0, 1);
       this.lines = vuiParsed.lines;
       this.selectedName = vuiParsed.selectedName;
       this.columnIDs = vuiParsed.columnIDs;
       this.fileType = commonParsed.fileType;
       this.fileName = commonParsed.fileName;
     }
-    if(savedCommand) {
+    if (savedCommand) {
       const commandParsed = JSON.parse(savedCommand);
       commandParsed.lines.splice(0, 1);
       this.commandLines = commandParsed.lines;
@@ -284,9 +311,9 @@ export class AppComponent {
     }
   }
 
-  onFollowUp({line}) {
-    const followUpData:any = {};
-    if(this.fileType === 'audio') {
+  onFollowUp({ line }) {
+    const followUpData: any = {};
+    if (this.fileType === 'audio') {
       followUpData.followContext = line.columns['P'];
     }
     else {

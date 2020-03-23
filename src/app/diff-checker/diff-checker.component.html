@@ -1,1 +1,26 @@
-<p>diff-checker works!</p>
+<div class="dif-checker">
+  <div class="file-pickers">
+    <div class="file-pick">
+      <span class="label">First file: </span>
+      <input multiple="false" (change) = "loadFile($event, 'firstDiff')" type="file" />
+    </div>
+    <div class="file-pick">
+      <span class="label">Second file: </span>
+      <input multiple="false" (change) = "loadFile($event, 'secondDiff')" type="file" />
+    </div>
+  </div>
+  <div class="sheet-selector">
+    <div class="label">
+      <span class="selector-label">
+        Select sheet to check
+      </span>
+    </div>
+    <div class="select">
+      <select (change) = "sheetSelected($event)">
+        <option class="sheet-name">Select sheet name</option>
+        <option *ngFor="let item of sameSheetNames" class="sheet-name">{{item}}</option>
+      </select>
+    </div>
+    <div class="diff-conclusion" *ngIf="checkedFlag">{{differences.length ? 'Sheets are different' : 'No difference detected'}}</div>
+  </div>
+</div>
