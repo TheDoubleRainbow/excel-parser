@@ -15,10 +15,13 @@ export class DiffCheckerComponent implements OnInit {
 
   sameSheetNames: Array<string>;
   differences: Array<any> = [];
+  checkedFlag = false;
 
   constructor() { }
 
   loadFile(e:any, diffType: 'firstDiff' | 'secondDiff'): void {
+    this.checkedFlag = false;
+
     this.fileLoad.emit({
       target: e.target,
       diffType,
@@ -41,25 +44,27 @@ export class DiffCheckerComponent implements OnInit {
   }
 
   checkDifference() {
-    console.log('Check Difference');
+    this.checkedFlag = true;
+    this.differences = [];
     const first = this.diffData.firstDiff.lines;
     const second = this.diffData.secondDiff.lines;
     const main = first.length > second.length ? first : second;
     const alt = first.length > second.length ? second : first;
 
+    const intialDiff = [];
+
     for(let i = 0; i < main.length; i++) {
       if(main[i]) {
         const altChecked = alt[i] || {row: [i], columns: {}};
         const mainValues = Object.values(main[i].columns);
-        const altValues = Object.values(alt[i].columns);
+        const altValues = Object.values(altChecked.columns);
 
         if(mainValues.toString() != altValues.toString()) {
-          this.differences.push([main[i], alt[i]]);
+          this.differences.push([main[i], altChecked]);
         }
-        console.log(this.differences);
       }
     }
-
+    console.log(this.differences);
   }
 
   ngOnChanges(changes: any): void {

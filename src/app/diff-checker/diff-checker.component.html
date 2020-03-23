@@ -21,5 +21,6 @@
         <option *ngFor="let item of sameSheetNames" class="sheet-name">{{item}}</option>
       </select>
     </div>
+    <div class="diff-conclusion" *ngIf="checkedFlag">{{differences.length ? 'Sheets are different' : 'No difference detected'}}</div>
   </div>
 </div>
