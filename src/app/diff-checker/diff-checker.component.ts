@@ -1,6 +1,8 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ParsedDiff, Line } from '../types';
 
+import hash from 'object-hash';
+
 @Component({
   selector: 'app-diff-checker',
   templateUrl: './diff-checker.component.html',
@@ -51,20 +53,47 @@ export class DiffCheckerComponent implements OnInit {
     const main = first.length > second.length ? first : second;
     const alt = first.length > second.length ? second : first;
 
-    const intialDiff = [];
+    let cursorDiff = [];
+    let findResults = [];
+    let altI = 0;
 
     for(let i = 0; i < main.length; i++) {
       if(main[i]) {
-        const altChecked = alt[i] || {row: [i], columns: {}};
-        const mainValues = Object.values(main[i].columns);
-        const altValues = Object.values(altChecked.columns);
+        const altChecked = alt[altI] || {row: [altI], columns: {}};
+        const mainHash = hash(main[i]);
+        const altHash = hash(altChecked);
 
-        if(mainValues.toString() != altValues.toString()) {
+        if(mainHash != altHash) {
+          cursorDiff = [{i: i, value: main[i]}, {i: altI, value: altChecked}];
+
+          // const findResult = this.findLine(main[i], alt);
+
+          // if(findResult) {
+          //   altI += 1;
+          //   findResults.push({value: findResult, i});
+          // }
+          // else {
+          //   altI -= 1;
+          // }
+
           this.differences.push([main[i], altChecked]);
         }
       }
+      altI++;
     }
-    console.log(this.differences);
+  }
+
+  findLine(line: Line, array: Array<Line>) {
+    let result: false | Line = false;
+    array.map(
+      (value) => {
+        if(Object.values(value.columns).toString() === Object.values(line.columns).toString()) {
+          result = result ? result : value;
+        }
+      }
+    )
+
+    return result;
   }
 
   ngOnChanges(changes: any): void {
