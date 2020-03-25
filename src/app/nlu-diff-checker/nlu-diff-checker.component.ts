@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
+import { diffArrays } from 'diff';
+import { ChangeListArray } from '../types';
+
 @Component({
   selector: 'app-nlu-diff-checker',
   templateUrl: './nlu-diff-checker.component.html',
@@ -10,6 +13,8 @@ export class NluDiffCheckerComponent implements OnInit {
   linesFist: Array<string>;
 
   linesSecond: Array<string>;
+
+  changeList: ChangeListArray = [];
 
   constructor() { }
 
@@ -27,11 +32,26 @@ export class NluDiffCheckerComponent implements OnInit {
         this.linesSecond = lines;
       }
     };
+
     reader.readAsText(file);
   }
 
   check() {
+    this.changeList = [];
+    if(this.linesFist && this.linesSecond) {
+     const diffList = diffArrays(this.linesFist, this.linesSecond);
 
+     diffList.map(el => {
+       if(el.added) {
+        this.changeList.push({type: 'added', value: el.value});
+       }
+       else if(el.removed) {
+        this.changeList.push({type: 'removed', value: el.value});
+       }
+     })
+    }
+
+    console.log(this.changeList);
   }
 
   ngOnInit(): void {
