@@ -10,6 +10,7 @@ import { SheetComponent } from './sheet/sheet.component';
 import { PopupComponent } from './popup/popup.component';
 import { DiffCheckerComponent } from './diff-checker/diff-checker.component';
 import { TableFilterComponent } from './table-filter/table-filter.component';
+import { NluDiffCheckerComponent } from './nlu-diff-checker/nlu-diff-checker.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { TableFilterComponent } from './table-filter/table-filter.component';
     SheetComponent,
     PopupComponent,
     DiffCheckerComponent,
-    TableFilterComponent
+    TableFilterComponent,
+    NluDiffCheckerComponent
   ],
   imports: [
     BrowserModule,

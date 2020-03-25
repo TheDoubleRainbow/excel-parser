@@ -1,0 +1,25 @@
+<div class="dif-checker">
+  <div class="file-pickers">
+    <div class="file-pick">
+      <span class="label">First file: </span>
+      <input multiple="false" (change) = "loadFile($event, 'first')" type="file" />
+    </div>
+    <div class="file-pick">
+      <span class="label">Second file: </span>
+      <input multiple="false" (change) = "loadFile($event, 'second')" type="file" />
+    </div>
+  </div>
+  <div class="check" (click) = "check()" >
+    <button class="button is-primary">Check</button>
+  </div>
+  <div class="lines">
+    <ng-container *ngFor="let line of changeList">
+      <div *ngFor="let value of line.value" class="line" [class]="{
+        'added': line.type === 'added',
+        'removed': line.type === 'removed'
+      }">
+        {{value}}
+      </div>
+    </ng-container>
+  </div>
+</div>

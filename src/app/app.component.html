@@ -63,9 +63,19 @@
 </div>
 
 <div class="box-wrap">
+  <div class="search-box box"  *ngIf="lines" [class]="{'spoiled' : isSpoiled.nluDiffChecker}">
+    <div class="spoiler" (click) = "spoil('nluDiffChecker')">
+      <span class="spoiler-switch">{{isSpoiled.nluDiffChecker ? '+' : '-'}}</span> NLUSpec diff checker
+    </div>
+    <app-nlu-diff-checker>
+    </app-nlu-diff-checker>
+  </div>
+</div>
+
+<div class="box-wrap">
   <div class="search-box box"  *ngIf="lines" [class]="{'spoiled' : isSpoiled.diffChecker}">
     <div class="spoiler" (click) = "spoil('diffChecker')">
-      <span class="spoiler-switch">{{isSpoiled.diffChecker ? '+' : '-'}}</span> Diff Checker
+      <span class="spoiler-switch">{{isSpoiled.diffChecker ? '+' : '-'}}</span> Diff Checker (Excel rough check)
     </div>
     <app-diff-checker
     (fileLoad) = "onDiffFileLoad($event)"

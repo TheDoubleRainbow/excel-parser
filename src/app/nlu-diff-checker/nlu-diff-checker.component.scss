@@ -1,0 +1,44 @@
+.file-pickers {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  padding: 20px 0;
+}
+
+.check {
+  text-align: center;
+}
+
+.lines {
+  margin-top: 15px;
+}
+
+.line {
+  border: 1px solid #ccc;
+  padding: 3px 10px 3px 30px;
+  position: relative;
+  overflow-wrap: break-word;
+  color: black;
+}
+
+.line.added {
+  background-color: lightgreen;
+}
+
+.line.added::before {
+  position: absolute;
+  content: "+";
+  top: 2px;
+  left: 6px;
+}
+
+.line.removed {
+  background-color: tomato;
+}
+
+.line.removed::before {
+  position: absolute;
+  content: "-";
+  top: 2px;
+  left: 8px;
+}

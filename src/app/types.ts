@@ -17,3 +17,10 @@ export class ParsedDiff {
   selectedSheet: string;
 }
 
+export type ChangeListArray = Array<Change>
+
+export type Change = {
+  type: 'added' | 'removed',
+  value: Array<string>,
+}
+

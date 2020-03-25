@@ -23,9 +23,10 @@ export class AppComponent {
   modalActive: boolean;
   modalHasContent: boolean = false;
   isSpoiled = {
-    file: false,
-    search: false,
-    followUp: false,
+    file: true,
+    search: true,
+    followUp: true,
+    nluDiffChecker: false,
     diffChecker: true,
   }
   fileName: string;
