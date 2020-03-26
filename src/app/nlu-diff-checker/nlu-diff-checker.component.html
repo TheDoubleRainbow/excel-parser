@@ -13,6 +13,7 @@
     <button class="button is-primary">Check</button>
   </div>
   <div class="lines">
+    Topic example: <div class="tag" (click) = "topicClick($event)">General.Send</div>
     <ng-container *ngFor="let line of changeList">
       <div *ngFor="let value of line.value" class="line" [class]="{
         'added': line.type === 'added',

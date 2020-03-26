@@ -234,32 +234,7 @@ export class AppComponent {
       this.findColumn = this.commandLines.filter(data => {
         if (data.columns.B === event) {
 
-          data.columns = Object.keys(data.columns).reduce((object, key) => {
-
-            if (key == 'B' || key == 'D' || key == 'E') {
-              object[key] = data.columns[key];
-            }
-
-            if (key == 'E' && typeof object['E'] !== 'object') {
-              object[key] = object[key].split(',').map((item, key) => {
-                if (item.includes('=')) {
-                  return {
-                    name: item.split('=')[0],
-                    sep: '=',
-                    value: item.split('=')[1]
-                  }
-                } else {
-                  return {
-                    name: item,
-                    sep: '',
-                    value: ''
-                  }
-                }
-              }, {});
-            }
-
-            return object
-          }, {});
+          data.columns = this.parseCommandLine(data);
 
           this.commandColumnIDs = Object.keys(data.columns);
 
@@ -278,6 +253,53 @@ export class AppComponent {
 
   onPopupClose() {
     this.modalActive = false;
+  }
+
+  onTopicClick(data:string) {
+    let lines = [];
+    if(this.commandLines) {
+      this.modalHasContent = true;
+      this.commandLines.map(line => {
+        if(line.columns.D === data) {
+          line.columns = this.parseCommandLine(line);
+          this.commandColumnIDs = Object.keys(line.columns);
+          lines.push(line);
+        }
+      })
+    }
+
+    this.modalActive = true;
+    this.findColumn = lines;
+  }
+
+  parseCommandLine(data: Line) {
+    return Object.keys(data.columns).reduce((object, key) => {
+
+      if (key == 'B' || key == 'D' || key == 'E') {
+        object[key] = data.columns[key];
+      }
+
+      if (key == 'E' && typeof object['E'] !== 'object') {
+        object[key] = object[key].split(',').map((item, key) => {
+          if (item.includes('=')) {
+            return {
+              name: item.split('=')[0],
+              sep: '=',
+              value: item.split('=')[1]
+            }
+          } else {
+            return {
+              name: item,
+              sep: '',
+              value: ''
+            }
+          }
+        }, {});
+      }
+
+      return object
+    }, {});
+
   }
 
   checkSavedData() {
