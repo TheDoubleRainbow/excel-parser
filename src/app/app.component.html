@@ -67,7 +67,7 @@
     <div class="spoiler" (click) = "spoil('nluDiffChecker')">
       <span class="spoiler-switch">{{isSpoiled.nluDiffChecker ? '+' : '-'}}</span> NLUSpec diff checker
     </div>
-    <app-nlu-diff-checker>
+    <app-nlu-diff-checker (topicClicked) = "onTopicClick($event)">
     </app-nlu-diff-checker>
   </div>
 </div>

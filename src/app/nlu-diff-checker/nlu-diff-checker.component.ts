@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 
 import { diffArrays } from 'diff';
 import { ChangeListArray } from '../types';
@@ -11,10 +11,10 @@ import { ChangeListArray } from '../types';
 export class NluDiffCheckerComponent implements OnInit {
 
   linesFist: Array<string>;
-
   linesSecond: Array<string>;
-
   changeList: ChangeListArray = [];
+
+  @Output() topicClicked: EventEmitter<any> = new EventEmitter();
 
   constructor() { }
 
@@ -52,6 +52,10 @@ export class NluDiffCheckerComponent implements OnInit {
     }
 
     console.log(this.changeList);
+  }
+
+  topicClick(event) {
+    this.topicClicked.emit(event.target.innerHTML);
   }
 
   ngOnInit(): void {
