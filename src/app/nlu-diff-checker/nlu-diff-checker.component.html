@@ -22,5 +22,8 @@
         {{value}}
       </div>
     </ng-container>
+    <div class="no-changes" *ngIf="checked && !changeList.length">
+      No changes detected
+    </div>
   </div>
 </div>

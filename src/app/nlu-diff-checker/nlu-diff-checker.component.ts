@@ -13,6 +13,7 @@ export class NluDiffCheckerComponent implements OnInit {
   linesFist: Array<string>;
   linesSecond: Array<string>;
   changeList: ChangeListArray = [];
+  checked = false;
 
   @Output() topicClicked: EventEmitter<any> = new EventEmitter();
 
@@ -51,6 +52,7 @@ export class NluDiffCheckerComponent implements OnInit {
      })
     }
 
+    this.checked = true;
     console.log(this.changeList);
   }
 
