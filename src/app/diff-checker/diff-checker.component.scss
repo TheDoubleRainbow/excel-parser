@@ -18,3 +18,15 @@
 .diff-conclusion {
   margin: 10px 0;
 }
+
+.changes {
+  overflow-x: auto;
+}
+
+.added {
+  background-color: lightgreen;
+}
+
+.removed {
+  background-color: tomato;
+}

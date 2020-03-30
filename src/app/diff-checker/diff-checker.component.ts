@@ -1,5 +1,8 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { ParsedDiff, Line } from '../types';
+import { ParsedDiff, Line, ChangeListArray } from '../types';
+
+
+import { diffArrays } from 'diff';
 
 import hash from 'object-hash';
 
@@ -16,8 +19,9 @@ export class DiffCheckerComponent implements OnInit {
   @Input() diffData: ParsedDiff;
 
   sameSheetNames: Array<string>;
-  differences: Array<any> = [];
   checkedFlag = false;
+  changeList: ChangeListArray = [];
+  hashMap: any = {};
 
   constructor() { }
 
@@ -47,40 +51,55 @@ export class DiffCheckerComponent implements OnInit {
 
   checkDifference() {
     this.checkedFlag = true;
-    this.differences = [];
     const first = this.diffData.firstDiff.lines;
     const second = this.diffData.secondDiff.lines;
     const main = first.length > second.length ? first : second;
     const alt = first.length > second.length ? second : first;
 
-    let cursorDiff = [];
-    let findResults = [];
-    let altI = 0;
+    this.hashMap = {};
+    let mainHashArr = [];
+    let altHashArr = [];
+    this.changeList = [];
 
     for(let i = 0; i < main.length; i++) {
       if(main[i]) {
-        const altChecked = alt[altI] || {row: [altI], columns: {}};
-        const mainHash = hash(main[i]);
-        const altHash = hash(altChecked);
+        //const altChecked = alt[i] || {row: [i], columns: {}};
+        const mainHash = hash(main[i].columns);
+        const altHash = alt[i] ? hash(alt[i].columns) : '';
 
-        if(mainHash != altHash) {
-          cursorDiff = [{i: i, value: main[i]}, {i: altI, value: altChecked}];
+        this.hashMap[mainHash] = main[i];
+        if(altHash && mainHash != altHash) {
+          this.hashMap[altHash] = alt[i];
+        }
 
-          // const findResult = this.findLine(main[i], alt);
-
-          // if(findResult) {
-          //   altI += 1;
-          //   findResults.push({value: findResult, i});
-          // }
-          // else {
-          //   altI -= 1;
-          // }
-
-          this.differences.push([main[i], altChecked]);
+        mainHashArr.push(mainHash);
+        if(altHash) {
+          altHashArr.push(altHash);
         }
       }
-      altI++;
     }
+
+    const diffList = diffArrays(mainHashArr, altHashArr);
+
+     diffList.map(el => {
+       if(el.added) {
+        this.changeList.push({type: 'added', value: el.value});
+       }
+       else if(el.removed) {
+        this.changeList.push({type: 'removed', value: el.value});
+       }
+     })
+
+    console.log(this.changeList);
+    console.log(this.getDataFromHash(this.changeList[0].value));
+  }
+
+  getDataFromHash(hash) {
+    const line = this.hashMap[hash];
+    return {
+      row: line.row,
+      values: Object.values(this.hashMap[hash].columns),
+    };
   }
 
   findLine(line: Line, array: Array<Line>) {
