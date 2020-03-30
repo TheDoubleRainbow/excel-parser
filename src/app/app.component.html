@@ -75,7 +75,7 @@
 <div class="box-wrap">
   <div class="search-box box"  *ngIf="lines" [class]="{'spoiled' : isSpoiled.diffChecker}">
     <div class="spoiler" (click) = "spoil('diffChecker')">
-      <span class="spoiler-switch">{{isSpoiled.diffChecker ? '+' : '-'}}</span> Diff Checker (Excel rough check)
+      <span class="spoiler-switch">{{isSpoiled.diffChecker ? '+' : '-'}}</span> Excel diff checker (experimental)
     </div>
     <app-diff-checker
     (fileLoad) = "onDiffFileLoad($event)"
