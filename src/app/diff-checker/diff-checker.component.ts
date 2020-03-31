@@ -78,8 +78,13 @@ export class DiffCheckerComponent implements OnInit {
         }
       }
     }
-
-    const diffList = diffArrays(mainHashArr, altHashArr);
+    let diffList;
+    if(main === first) {
+      diffList = diffArrays(mainHashArr, altHashArr);
+    }
+    else if(main === second) {
+      diffList = diffArrays(altHashArr, mainHashArr);
+    }
 
      diffList.map(el => {
        if(el.added) {
@@ -91,7 +96,6 @@ export class DiffCheckerComponent implements OnInit {
      })
 
     console.log(this.changeList);
-    console.log(this.getDataFromHash(this.changeList[0].value));
   }
 
   getDataFromHash(hash) {
