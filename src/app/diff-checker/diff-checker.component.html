@@ -2,11 +2,15 @@
   <div class="file-pickers">
     <div class="file-pick">
       <span class="label">First file: </span>
-      <input multiple="false" (change) = "loadFile($event, 'firstDiff')" type="file" />
+      <input
+      accept = ".xls, .xlsx, .xlsm" multiple="false"
+      (change) = "loadFile($event, 'firstDiff')" type="file" />
     </div>
     <div class="file-pick">
       <span class="label">Second file: </span>
-      <input multiple="false" (change) = "loadFile($event, 'secondDiff')" type="file" />
+      <input
+      accept = ".xls, .xlsx, .xlsm" multiple="false"
+      (change) = "loadFile($event, 'secondDiff')" type="file" />
     </div>
   </div>
   <div class="sheet-selector">
@@ -21,6 +25,20 @@
         <option *ngFor="let item of sameSheetNames" class="sheet-name">{{item}}</option>
       </select>
     </div>
-    <div class="diff-conclusion" *ngIf="checkedFlag">{{differences.length ? 'Sheets are different' : 'No difference detected'}}</div>
+    <div class="diff-conclusion" *ngIf="checkedFlag">{{changeList.length ? 'Sheets are different' : 'No difference detected'}}</div>
+    <div class="changes">
+      <table class="table">
+        <ng-container *ngFor="let items of changeList">
+          <tr *ngFor="let item of items.value" [class] = "items.type">
+            <td>
+              {{getDataFromHash(item).row}}
+            </td>
+            <td *ngFor="let value of getDataFromHash(item).values">
+              {{value}}
+            </td>
+          </tr>
+        </ng-container>
+      </table>
+    </div>
   </div>
 </div>

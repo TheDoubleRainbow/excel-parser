@@ -13,6 +13,7 @@ export class NluDiffCheckerComponent implements OnInit {
   linesFist: Array<string>;
   linesSecond: Array<string>;
   changeList: ChangeListArray = [];
+  checked = false;
 
   linesList: Array<Array<[Diff]>>  = [];
 
@@ -58,6 +59,7 @@ export class NluDiffCheckerComponent implements OnInit {
 
      let lastIndex = 0;
 
+
      for (let i = 0; i < this.changeList.length / 2; i++) {
         const firstStr = this.changeList[lastIndex].value[0];
         const secondStr = this.changeList[lastIndex + 1].value[0];
@@ -65,6 +67,8 @@ export class NluDiffCheckerComponent implements OnInit {
         lastIndex = lastIndex + 2;
      }
     }
+    this.checked = true;
+    console.log(this.changeList);
   }
 
 

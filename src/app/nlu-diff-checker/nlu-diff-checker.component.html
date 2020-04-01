@@ -2,11 +2,15 @@
   <div class="file-pickers">
     <div class="file-pick">
       <span class="label">First file: </span>
-      <input multiple="false" (change) = "loadFile($event, 'first')" type="file" />
+      <input
+      accept = ".nluspec" multiple="false"
+      (change) = "loadFile($event, 'first')" type="file" />
     </div>
     <div class="file-pick">
       <span class="label">Second file: </span>
-      <input multiple="false" (change) = "loadFile($event, 'second')" type="file" />
+      <input
+      accept = ".nluspec" multiple="false"
+      (change) = "loadFile($event, 'second')" type="file" />
     </div>
   </div>
   <div class="check" (click) = "check()" >
@@ -22,9 +26,9 @@
         {{value}}
       </div>
     </ng-container>
-
-
-   
+    <div class="no-changes" *ngIf="checked && !changeList.length">
+      No changes detected
+    </div>
   </div>
 
   <br/>
