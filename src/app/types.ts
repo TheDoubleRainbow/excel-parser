@@ -24,3 +24,10 @@ export type Change = {
   value: Array<string>,
 }
 
+export type Diff = {
+  count: number,
+  added?: string | undefined,
+  removed?: boolean,
+    value: string
+}
+

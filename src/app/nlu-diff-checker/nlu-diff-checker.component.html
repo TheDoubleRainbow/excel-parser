@@ -22,5 +22,33 @@
         {{value}}
       </div>
     </ng-container>
+
+
+   
   </div>
+
+  <br/>
+
+  <ng-container >
+    <div *ngIf = "linesList.length">
+        <spar class="red small">red color => </spar>
+        <spar>delete</spar>
+        <br/>
+        <spar class="green small">green color => </spar>
+        <spar>add</spar>
+    </div>
+  
+    <div *ngFor="let lines of linesList">
+      <div *ngFor="let line of lines">
+        <span *ngFor="let val of line"  class="small" [class]="{
+          'green': val.added,
+          'red': val.removed
+        }">
+          {{val.value}}
+      </span>
+    </div>
+        
+    </div>
+    
+  </ng-container>
 </div>

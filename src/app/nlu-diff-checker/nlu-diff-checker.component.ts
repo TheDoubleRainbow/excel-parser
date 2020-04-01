@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 
-import { diffArrays } from 'diff';
-import { ChangeListArray } from '../types';
+import { diffArrays, diffChars } from 'diff';
+import { ChangeListArray, Diff } from '../types';
 
 @Component({
   selector: 'app-nlu-diff-checker',
@@ -14,6 +14,8 @@ export class NluDiffCheckerComponent implements OnInit {
   linesSecond: Array<string>;
   changeList: ChangeListArray = [];
 
+  linesList: Array<Array<[Diff]>>  = [];
+
   @Output() topicClicked: EventEmitter<any> = new EventEmitter();
 
   constructor() { }
@@ -24,11 +26,10 @@ export class NluDiffCheckerComponent implements OnInit {
     const reader = new FileReader();
     reader.onload = (e) => {
       console.log(type, e.target.result);
-      const lines = (e.target.result+'').split('\n');
-      if(type === 'first') {
+      const lines = (e.target.result + '').split('\n');
+      if (type === 'first') {
         this.linesFist = lines;
-      }
-      else {
+      } else {
         this.linesSecond = lines;
       }
     };
@@ -38,21 +39,34 @@ export class NluDiffCheckerComponent implements OnInit {
 
   check() {
     this.changeList = [];
-    if(this.linesFist && this.linesSecond) {
+
+    if (this.linesFist && this.linesSecond) {
+
      const diffList = diffArrays(this.linesFist, this.linesSecond);
 
+
      diffList.map(el => {
-       if(el.added) {
+
+       if (el.added) {
+        console.log('el.added', el.value);
         this.changeList.push({type: 'added', value: el.value});
-       }
-       else if(el.removed) {
+       } else if (el.removed) {
+        console.log('el.removed', el.value);
         this.changeList.push({type: 'removed', value: el.value});
        }
-     })
-    }
+     });
 
-    console.log(this.changeList);
+     let lastIndex = 0;
+
+     for (let i = 0; i < this.changeList.length / 2; i++) {
+        const firstStr = this.changeList[lastIndex].value[0];
+        const secondStr = this.changeList[lastIndex + 1].value[0];
+        this.linesList.push([diffChars(firstStr, secondStr)]) ;
+        lastIndex = lastIndex + 2;
+     }
+    }
   }
+
 
   topicClick(event) {
     this.topicClicked.emit(event.target.innerHTML);
