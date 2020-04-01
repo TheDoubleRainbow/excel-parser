@@ -2,11 +2,15 @@
   <div class="file-pickers">
     <div class="file-pick">
       <span class="label">First file: </span>
-      <input multiple="false" (change) = "loadFile($event, 'firstDiff')" type="file" />
+      <input
+      accept = ".xls, .xlsx, .xlsm" multiple="false"
+      (change) = "loadFile($event, 'firstDiff')" type="file" />
     </div>
     <div class="file-pick">
       <span class="label">Second file: </span>
-      <input multiple="false" (change) = "loadFile($event, 'secondDiff')" type="file" />
+      <input
+      accept = ".xls, .xlsx, .xlsm" multiple="false"
+      (change) = "loadFile($event, 'secondDiff')" type="file" />
     </div>
   </div>
   <div class="sheet-selector">
